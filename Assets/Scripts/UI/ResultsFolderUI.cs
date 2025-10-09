@@ -10,21 +10,15 @@ public class ResultsFolderUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resultsPathText;
     [SerializeField] private Button openFolderButton;
 
-    private string resultsFolderPath;
-
     private void Start()
     {
-        // Formulate the absolute path to the Results folder, relative to project root
-        string root = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
-        resultsFolderPath = Path.Combine(root, "Output", "Results");
-
-        // Ensure folder exists
-        if (!Directory.Exists(resultsFolderPath))
-            Directory.CreateDirectory(resultsFolderPath);
+        // Ensure folder exists (PathConfig handles directory creation)
+        if (!Directory.Exists(PathConfig.AnnotatedImagesFolder))
+            Directory.CreateDirectory(PathConfig.AnnotatedImagesFolder);
 
         // Display path in TMP text
         if (resultsPathText != null)
-            resultsPathText.text = resultsFolderPath;
+            resultsPathText.text = PathConfig.AnnotatedImagesFolder;
 
         // Set up button listener
         if (openFolderButton != null)
@@ -33,19 +27,19 @@ public class ResultsFolderUI : MonoBehaviour
 
     private void OpenResultsFolder()
     {
-        if (Directory.Exists(resultsFolderPath))
+        if (Directory.Exists(PathConfig.AnnotatedImagesFolder))
         {
             // Open folder in OS file explorer
             Process.Start(new ProcessStartInfo()
             {
-                FileName = resultsFolderPath,
+                FileName = PathConfig.AnnotatedImagesFolder,
                 UseShellExecute = true,
                 Verb = "open"
             });
         }
         else
         {
-            UnityEngine.Debug.LogWarning("Results folder does not exist: " + resultsFolderPath);
+            UnityEngine.Debug.LogWarning("Results folder does not exist: " + PathConfig.AnnotatedImagesFolder);
         }
     }
 }

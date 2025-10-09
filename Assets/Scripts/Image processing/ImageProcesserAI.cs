@@ -11,17 +11,6 @@ using System.Text;
 
 public class ImageProcesser : MonoBehaviour
 {
-    // === External Package Paths (relative to build/project root) ===
-    private string aiPackagePath;
-    private string frameExtractorPath;
-
-    // === Output folders (constant relative path) ===
-    private const string OUTPUT_FOLDER_NAME = "Output";
-
-    private string baseFolder;
-    private string imagesFolder;
-    private string resultsFolder;
-
     public static event Action OnProcessSelectSingleImage;
     public static event Action OnProcessSelectFolderOfImages;
     public static event Action OnSelectVideoAndProcessFrames;
@@ -69,22 +58,11 @@ public class ImageProcesser : MonoBehaviour
 
     void Start()
     {
-        string root = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
-
-        aiPackagePath = Path.Combine(root, "ExternalPackages", "Segmentation");
-        frameExtractorPath = Path.Combine(root, "ExternalPackages", "frame_extractor");
-
-        baseFolder = Path.Combine(root, OUTPUT_FOLDER_NAME);
-        imagesFolder = Path.Combine(baseFolder, "ImagesUsed");
-        resultsFolder = Path.Combine(baseFolder, "Results");
-
-        Directory.CreateDirectory(imagesFolder);
-        Directory.CreateDirectory(resultsFolder);
-
-        UnityEngine.Debug.Log($"Using folders:\nImages: {imagesFolder}\nResults: {resultsFolder}");
+        // Initialize all directories through the centralized config
+        PathConfig.InitializeDirectories();
     }
 
-    public void ChangeAmountOfImagesToProcessVideo (int newAmount)
+    public void ChangeAmountOfImagesToProcessVideo(int newAmount)
     {
         amountOfImagesToProcessVideo = newAmount;
     }
@@ -97,7 +75,7 @@ public class ImageProcesser : MonoBehaviour
         if (paths.Length > 0 && !string.IsNullOrEmpty(paths[0]))
         {
             string selectedFile = paths[0];
-            string destPath = Path.Combine(imagesFolder, Path.GetFileName(selectedFile));
+            string destPath = Path.Combine(PathConfig.UsedImagesFolder, Path.GetFileName(selectedFile));
             File.Copy(selectedFile, destPath, true);
             UnityEngine.Debug.Log($"Copied {selectedFile} to folder: {destPath}");
 
@@ -118,6 +96,7 @@ public class ImageProcesser : MonoBehaviour
         yield return StartCoroutine(ProcessImageWithAI(imagePath));
 
         UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
+        ProcessingResultPackager.RequestPackageData();
     }
 
     public void ProcessSelectFolderOfImages()
@@ -138,8 +117,18 @@ public class ImageProcesser : MonoBehaviour
             return;
         }
 
-        // Start async processing
-        StartCoroutine(ProcessFolderImagesAsync(imageFiles));
+        // Copy images to imagesFolder before processing
+        string[] copiedImagePaths = new string[imageFiles.Length];
+        for (int i = 0; i < imageFiles.Length; i++)
+        {
+            string destPath = Path.Combine(PathConfig.UsedImagesFolder, Path.GetFileName(imageFiles[i]));
+            File.Copy(imageFiles[i], destPath, true);
+            copiedImagePaths[i] = destPath;
+            UnityEngine.Debug.Log($"Copied {imageFiles[i]} to folder: {destPath}");
+        }
+
+        // Start async processing with copied files
+        StartCoroutine(ProcessFolderImagesAsync(copiedImagePaths));
     }
 
     private IEnumerator ProcessFolderImagesAsync(string[] imageFiles)
@@ -147,6 +136,7 @@ public class ImageProcesser : MonoBehaviour
         UIManager.RequestUIChange(UIManager.UIType.ProcessingImages);
         yield return StartCoroutine(ProcessImageListAsync(imageFiles));
         UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
+        ProcessingResultPackager.RequestPackageData();
     }
 
     private IEnumerator ProcessImageListAsync(string[] imageFiles)
@@ -265,7 +255,7 @@ public class ImageProcesser : MonoBehaviour
         Destroy(vpGO);
 
         double fps = Math.Max(0.0001, desiredFrames / duration);
-        string batchPath = Path.Combine(frameExtractorPath, "extract_frames.bat");
+        string batchPath = Path.Combine(PathConfig.FrameExtractorPath, "extract_frames.bat");
         if (!File.Exists(batchPath))
         {
             UnityEngine.Debug.LogError($"extract_frames.bat not found at {batchPath}");
@@ -276,7 +266,7 @@ public class ImageProcesser : MonoBehaviour
         var startInfo = new ProcessStartInfo()
         {
             FileName = batchPath,
-            Arguments = $"\"{videoPath}\" {fps} \"{imagesFolder}\"",
+            Arguments = $"\"{videoPath}\" {fps} \"{PathConfig.UsedImagesFolder}\"",
             UseShellExecute = false,
             CreateNoWindow = true,
             RedirectStandardOutput = true,
@@ -288,10 +278,10 @@ public class ImageProcesser : MonoBehaviour
         // Extract frames and wait for completion
         UnityEngine.Debug.Log("Extracting frames from video...");
         yield return StartCoroutine(RunProcessAsync(startInfo, workingDir));
-        yield return StartCoroutine(WaitForFramesFolder(imagesFolder, desiredFrames, 30f));
+        yield return StartCoroutine(WaitForFramesFolder(PathConfig.UsedImagesFolder, desiredFrames, 30f));
 
         // Now get all extracted frames
-        string[] allFrames = Directory.GetFiles(imagesFolder, "frame_*.png")
+        string[] allFrames = Directory.GetFiles(PathConfig.UsedImagesFolder, "frame_*.png")
                                      .OrderBy(x => x).ToArray();
 
         if (allFrames.Length == 0)
@@ -321,6 +311,7 @@ public class ImageProcesser : MonoBehaviour
         yield return StartCoroutine(ProcessImageListAsync(framesToProcess));
 
         UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
+        ProcessingResultPackager.RequestPackageData();
     }
 
     private IEnumerator ProcessImageWithAI(string imagePath)
@@ -338,12 +329,12 @@ public class ImageProcesser : MonoBehaviour
 
     private IEnumerator RunAnnotationAI(string imagePath)
     {
-        string batFile = Path.Combine(aiPackagePath, "run_segmentation.bat");
+        string batFile = Path.Combine(PathConfig.AIPackagePath, "run_segmentation.bat");
 
         ProcessStartInfo psi = new ProcessStartInfo()
         {
             FileName = batFile,
-            Arguments = $"-i \"{imagePath}\" -o \"{resultsFolder}\" -s -p",
+            Arguments = $"-i \"{imagePath}\" -o \"{PathConfig.AnnotatedImagesFolder}\" -s -p",
             UseShellExecute = false,
             CreateNoWindow = true,
             RedirectStandardOutput = true,
