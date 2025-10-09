@@ -30,6 +30,11 @@ public static class PathConfig
     private const string USED_IMAGES_FOLDER_NAME = "TEMP_ImagesUsed";
     private const string ANNOTATED_IMAGES_FOLDER_NAME = "TEMP_AnnotatedImages";
 
+    // Annotation Legend folder & config file
+    public static string AnnotationLegendFolder => Path.Combine(ProjectRoot, "ExternalPackages", "AnnotationLegend");
+    public static string AnnotationConfigFile => Path.Combine(AnnotationLegendFolder, "config_v1.2.json");
+
+
     // Full paths for temp folders
     public static string UsedImagesFolder => Path.Combine(OutputFolder, USED_IMAGES_FOLDER_NAME);
     public static string AnnotatedImagesFolder => Path.Combine(OutputFolder, ANNOTATED_IMAGES_FOLDER_NAME);
@@ -82,4 +87,5 @@ public static class PathConfig
     /// </summary>
     public static string GetPackagedUsedImagesFolder(string packageName) => Path.Combine(OutputFolder, "packagedData", packageName, "usedImages");
     public static string GetPackagedAnnotatedImagesFolder(string packageName) => Path.Combine(OutputFolder, "packagedData", packageName, "annotatedImages");
+    public static string GetPackagedDataFolder(string packageName) => Path.Combine(OutputFolder, "packagedData", packageName);
 }
