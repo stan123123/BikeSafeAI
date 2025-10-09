@@ -1,0 +1,41 @@
+{
+    "imageName": "001_panoptic-fused-colored-mask",
+    "labels": [
+        {
+            "labelName": "construction--barrier--curb",
+            "instanceCount": 0,
+            "pixelCount": 2312,
+            "areaPercent": 0.11149691045284271
+        },
+        {
+            "labelName": "construction--flat--road",
+            "instanceCount": 0,
+            "pixelCount": 477088,
+            "areaPercent": 23.007715225219728
+        },
+        {
+            "labelName": "nature--vegetation",
+            "instanceCount": 0,
+            "pixelCount": 614004,
+            "areaPercent": 29.610532760620118
+        },
+        {
+            "labelName": "object--junction-box",
+            "instanceCount": 0,
+            "pixelCount": 41866,
+            "areaPercent": 2.019000768661499
+        },
+        {
+            "labelName": "object--vehicle--bicycle",
+            "instanceCount": 0,
+            "pixelCount": 176721,
+            "areaPercent": 8.522424697875977
+        },
+        {
+            "labelName": "object--vehicle--car",
+            "instanceCount": 0,
+            "pixelCount": 162884,
+            "areaPercent": 7.855131149291992
+        }
+    ]
+}

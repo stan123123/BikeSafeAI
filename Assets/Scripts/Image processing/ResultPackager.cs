@@ -48,6 +48,24 @@ public class ProcessingResultPackager : MonoBehaviour
             File.Copy(file, dest, true);
         }
 
+        // After copying all annotated images
+        var legend = ConfigLoader.GetLabels(ConfigLoader.LoadDefaultAnnotationConfig());
+
+        foreach (string file in Directory.GetFiles(PathConfig.GetPackagedAnnotatedImagesFolder(PackageName)))
+        {
+            if (!file.EndsWith("_panoptic-fused-colored-mask.png")) continue;
+
+            byte[] bytes = File.ReadAllBytes(file);
+            Texture2D tex = new Texture2D(2, 2);
+            tex.LoadImage(bytes);
+            tex.name = Path.GetFileNameWithoutExtension(file);
+
+            var data = AnnotationAnalyzer.AnalyzeImage(tex, legend);
+
+            string jsonPath = Path.Combine(PathConfig.GetPackagedDataFolder(PackageName), tex.name + "_analysis.json");
+            AnnotationAnalyzer.SaveToJson(data, jsonPath);
+        }
+
         Debug.Log($"Packaged data for '{PackageName}' successfully!");
     }
 
