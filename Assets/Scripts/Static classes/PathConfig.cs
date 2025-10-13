@@ -34,7 +34,6 @@ public static class PathConfig
     public static string AnnotationLegendFolder => Path.Combine(ProjectRoot, "ExternalPackages", "AnnotationLegend");
     public static string AnnotationConfigFile => Path.Combine(AnnotationLegendFolder, "config_v1.2.json");
 
-
     // Full paths for temp folders
     public static string UsedImagesFolder => Path.Combine(OutputFolder, USED_IMAGES_FOLDER_NAME);
     public static string AnnotatedImagesFolder => Path.Combine(OutputFolder, ANNOTATED_IMAGES_FOLDER_NAME);
@@ -62,25 +61,30 @@ public static class PathConfig
         if (string.IsNullOrEmpty(packageName))
             packageName = "UnnamedPackage";
 
-        // Root folder for this package
         string packageRoot = Path.Combine(OutputFolder, "packagedData", packageName);
 
         // Subfolders
         string usedImages = Path.Combine(packageRoot, "usedImages");
         string annotatedImages = Path.Combine(packageRoot, "annotatedImages");
+        string imageStatsJson = Path.Combine(packageRoot, "imageStatsJson"); // new
 
         // Create all directories
         Directory.CreateDirectory(packageRoot);
         Directory.CreateDirectory(usedImages);
         Directory.CreateDirectory(annotatedImages);
+        Directory.CreateDirectory(imageStatsJson);
 
         Debug.Log($"Created packaged data folders for batch '{packageName}':\n" +
                   $"Package Root: {packageRoot}\n" +
                   $"Used Images: {usedImages}\n" +
-                  $"Annotated Images: {annotatedImages}");
+                  $"Annotated Images: {annotatedImages}\n" +
+                  $"Image Stats JSON: {imageStatsJson}");
 
         return packageRoot;
     }
+
+    public static string GetPackagedImageStatsFolder(string packageName)
+        => Path.Combine(OutputFolder, "packagedData", packageName, "imageStatsJson");
 
     /// <summary>
     /// Convenience getters if you know the package name
