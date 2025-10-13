@@ -30,7 +30,6 @@ public class ProcessingResultPackager : MonoBehaviour
         if (string.IsNullOrEmpty(PackageName))
             PackageName = "UnnamedPackage";
 
-        // Create the folder structure
         string packageRoot = PathConfig.CreatePackagedDataFolders(PackageName);
 
         // Copy temp used images
@@ -40,30 +39,42 @@ public class ProcessingResultPackager : MonoBehaviour
             File.Copy(file, dest, true);
         }
 
-        // Copy temp annotated images
-        foreach (string file in Directory.GetFiles(PathConfig.AnnotatedImagesFolder)
-                                 .Where(f => f.EndsWith("_panoptic-fused-colored-mask.png")))
+        // Copy all annotated images
+        foreach (string file in Directory.GetFiles(PathConfig.AnnotatedImagesFolder))
         {
             string dest = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(PackageName), Path.GetFileName(file));
             File.Copy(file, dest, true);
         }
 
-        // After copying all annotated images
         var legend = ConfigLoader.GetLabels(ConfigLoader.LoadDefaultAnnotationConfig());
 
-        foreach (string file in Directory.GetFiles(PathConfig.GetPackagedAnnotatedImagesFolder(PackageName)))
+        // Process only *_colored-mask.png images
+        foreach (string coloredMaskPath in Directory.GetFiles(PathConfig.GetPackagedAnnotatedImagesFolder(PackageName))
+                                                     .Where(f => f.EndsWith("_colored-mask.png")))
         {
-            if (!file.EndsWith("_panoptic-fused-colored-mask.png")) continue;
+            string baseName = Path.GetFileNameWithoutExtension(coloredMaskPath).Replace("_colored-mask", "");
+            string panopticMaskPath = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(PackageName),
+                                                   baseName + "_panoptic-colored-mask.png");
 
-            byte[] bytes = File.ReadAllBytes(file);
-            Texture2D tex = new Texture2D(2, 2);
-            tex.LoadImage(bytes);
-            tex.name = Path.GetFileNameWithoutExtension(file);
+            // Load colored mask
+            byte[] coloredBytes = File.ReadAllBytes(coloredMaskPath);
+            Texture2D coloredTex = new Texture2D(2, 2);
+            coloredTex.LoadImage(coloredBytes);
+            coloredTex.name = Path.GetFileNameWithoutExtension(coloredMaskPath);
 
-            var data = AnnotationAnalyzer.AnalyzeImage(tex, legend);
+            // Load panoptic mask (if it exists)
+            Texture2D panopticTex = null;
+            if (File.Exists(panopticMaskPath))
+            {
+                byte[] panoBytes = File.ReadAllBytes(panopticMaskPath);
+                panopticTex = new Texture2D(2, 2);
+                panopticTex.LoadImage(panoBytes);
+            }
 
-            string jsonPath = Path.Combine(PathConfig.GetPackagedDataFolder(PackageName), tex.name + "_analysis.json");
-            AnnotationAnalyzer.SaveToJson(data, jsonPath);
+            var data = AnnotationAnalyzer.AnalyzeImage(coloredTex, legend, panopticTex);
+
+            // FIXED: Pass only the PackageName, not the full path
+            AnnotationAnalyzer.SaveToJson(data, PackageName);
         }
 
         Debug.Log($"Packaged data for '{PackageName}' successfully!");

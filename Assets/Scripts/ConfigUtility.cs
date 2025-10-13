@@ -87,29 +87,21 @@ public static class ConfigLoader
 
 public static class AnnotationAnalyzer
 {
-    /// <summary>
-    /// Analyzes an annotated Texture2D using legend data and returns statistics.
-    /// </summary>
-    public static ImageAnnotationData AnalyzeImage(Texture2D annotatedTexture, LabelData[] legend)
+    public static ImageAnnotationData AnalyzeImage(Texture2D coloredTexture, LabelData[] legend, Texture2D panopticTexture = null)
     {
-        Color[] pixels = annotatedTexture.GetPixels();
-        int totalPixels = pixels.Length;
+        Color[] colorPixels = coloredTexture.GetPixels();
+        int totalPixels = colorPixels.Length;
 
-        var result = new ImageAnnotationData
-        {
-            imageName = annotatedTexture.name
-        };
-
-        // Prepare stats containers
+        var result = new ImageAnnotationData { imageName = coloredTexture.name };
         var labelStats = new Dictionary<string, LabelStats>();
-        foreach (var label in legend)
-        {
-            labelStats[label.name] = new LabelStats { labelName = label.name };
-        }
 
-        // Count pixels per label
-        foreach (var pixel in pixels)
+        foreach (var label in legend)
+            labelStats[label.name] = new LabelStats { labelName = label.name };
+
+        // --- AREA CALCULATION ---
+        for (int i = 0; i < colorPixels.Length; i++)
         {
+            var pixel = colorPixels[i];
             foreach (var label in legend)
             {
                 if (ColorsMatch(pixel, label.color))
@@ -120,23 +112,47 @@ public static class AnnotationAnalyzer
             }
         }
 
-        // Convert to percentage
-        foreach (var stats in labelStats.Values)
+        foreach (var label in legend)
         {
-            if (stats.pixelCount > 0)
+            var stats = labelStats[label.name];
+            stats.areaPercent = (float)stats.pixelCount / totalPixels * 100f;
+        }
+
+        // --- INSTANCE COUNT (panoptic comparison) ---
+        if (panopticTexture != null)
+        {
+            Color[] panopticPixels = panopticTexture.GetPixels();
+
+            foreach (var label in legend)
             {
-                stats.areaPercent = (float)stats.pixelCount / totalPixels * 100f;
-                result.labels.Add(stats);
+                HashSet<int> uniqueInstanceColors = new HashSet<int>();
+
+                for (int i = 0; i < colorPixels.Length; i++)
+                {
+                    // only check where this label exists in the colored mask
+                    if (!ColorsMatch(colorPixels[i], label.color))
+                        continue;
+
+                    Color p = panopticPixels[i];
+
+                    // Convert to 0–255 integer color (avoids float drift)
+                    int r = Mathf.RoundToInt(p.r * 255f);
+                    int g = Mathf.RoundToInt(p.g * 255f);
+                    int b = Mathf.RoundToInt(p.b * 255f);
+
+                    // combine into single int for hash comparison
+                    int colorKey = (r << 16) | (g << 8) | b;
+                    uniqueInstanceColors.Add(colorKey);
+                }
+
+                labelStats[label.name].instanceCount = uniqueInstanceColors.Count;
             }
         }
 
-        // TODO: add instanceCount later using connected component analysis
+        result.labels.AddRange(labelStats.Values);
         return result;
     }
 
-    /// <summary>
-    /// Compares Unity Color to RGB array with small tolerance
-    /// </summary>
     private static bool ColorsMatch(Color c, int[] rgb, float tolerance = 0.01f)
     {
         return Mathf.Abs(c.r * 255 - rgb[0]) < tolerance * 255 &&
@@ -144,14 +160,48 @@ public static class AnnotationAnalyzer
                Mathf.Abs(c.b * 255 - rgb[2]) < tolerance * 255;
     }
 
-    private static bool ColorsMatch(Color c, int[] rgb) => ColorsMatch(c, rgb, 0.01f);
-
-    /// <summary>
-    /// Saves image annotation data as JSON
-    /// </summary>
-    public static void SaveToJson(ImageAnnotationData data, string outputPath)
+    // Proper comparer for Color in HashSet
+    private class ColorComparer : IEqualityComparer<Color>
     {
+        public bool Equals(Color a, Color b)
+        {
+            return Mathf.Abs(a.r - b.r) < 0.001f &&
+                   Mathf.Abs(a.g - b.g) < 0.001f &&
+                   Mathf.Abs(a.b - b.b) < 0.001f;
+        }
+
+        public int GetHashCode(Color c)
+        {
+            int r = Mathf.RoundToInt(c.r * 255);
+            int g = Mathf.RoundToInt(c.g * 255);
+            int b = Mathf.RoundToInt(c.b * 255);
+            return (r << 16) | (g << 8) | b;
+        }
+    }
+
+    public static void SaveToJson(ImageAnnotationData data, string packageName)
+    {
+        string outputDir = PathConfig.GetPackagedImageStatsFolder(packageName);
+
+        // Sanitize filename and remove ALL extensions (handles cases like .json, .png, etc.)
+        string baseName = data.imageName;
+
+        // Strip all extensions until we have just the base name
+        while (Path.HasExtension(baseName))
+        {
+            baseName = Path.GetFileNameWithoutExtension(baseName);
+        }
+
+        // Sanitize path separators
+        string safeName = baseName
+            .Replace("/", "_")
+            .Replace("\\", "_");
+
+        string outputPath = Path.Combine(outputDir, $"{safeName}.json");
+
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(outputPath, json);
+
+        Debug.Log($"Saved image statistics JSON: {outputPath}");
     }
 }

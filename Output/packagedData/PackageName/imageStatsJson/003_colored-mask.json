@@ -1,0 +1,401 @@
+{
+    "imageName": "003_colored-mask",
+    "labels": [
+        {
+            "labelName": "animal--bird",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "animal--ground-animal",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "construction--barrier--curb",
+            "instanceCount": 9,
+            "pixelCount": 37279,
+            "areaPercent": 1.7977912425994874
+        },
+        {
+            "labelName": "construction--barrier--fence",
+            "instanceCount": 10,
+            "pixelCount": 43575,
+            "areaPercent": 2.1014177799224855
+        },
+        {
+            "labelName": "construction--barrier--guard-rail",
+            "instanceCount": 6,
+            "pixelCount": 12484,
+            "areaPercent": 0.6020447611808777
+        },
+        {
+            "labelName": "construction--barrier--other-barrier",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "construction--barrier--wall",
+            "instanceCount": 14,
+            "pixelCount": 113354,
+            "areaPercent": 5.466531753540039
+        },
+        {
+            "labelName": "construction--flat--bike-lane",
+            "instanceCount": 7,
+            "pixelCount": 14997,
+            "areaPercent": 0.7232349514961243
+        },
+        {
+            "labelName": "construction--flat--crosswalk-plain",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "construction--flat--curb-cut",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "construction--flat--parking",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "construction--flat--pedestrian-area",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "construction--flat--rail-track",
+            "instanceCount": 5,
+            "pixelCount": 28351,
+            "areaPercent": 1.367235779762268
+        },
+        {
+            "labelName": "construction--flat--road",
+            "instanceCount": 25,
+            "pixelCount": 460353,
+            "areaPercent": 22.200666427612306
+        },
+        {
+            "labelName": "construction--flat--service-lane",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "construction--flat--sidewalk",
+            "instanceCount": 14,
+            "pixelCount": 65992,
+            "areaPercent": 3.1824846267700197
+        },
+        {
+            "labelName": "construction--structure--bridge",
+            "instanceCount": 10,
+            "pixelCount": 7335,
+            "areaPercent": 0.3537326455116272
+        },
+        {
+            "labelName": "construction--structure--building",
+            "instanceCount": 8,
+            "pixelCount": 96516,
+            "areaPercent": 4.654513835906982
+        },
+        {
+            "labelName": "construction--structure--tunnel",
+            "instanceCount": 1,
+            "pixelCount": 176,
+            "areaPercent": 0.00848765391856432
+        },
+        {
+            "labelName": "human--person",
+            "instanceCount": 9,
+            "pixelCount": 7966,
+            "areaPercent": 0.3841628134250641
+        },
+        {
+            "labelName": "human--rider--bicyclist",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "human--rider--motorcyclist",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "human--rider--other-rider",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "marking--crosswalk-zebra",
+            "instanceCount": 2,
+            "pixelCount": 3908,
+            "areaPercent": 0.18846450746059419
+        },
+        {
+            "labelName": "marking--general",
+            "instanceCount": 17,
+            "pixelCount": 74512,
+            "areaPercent": 3.5933642387390138
+        },
+        {
+            "labelName": "nature--mountain",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "nature--sand",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "nature--sky",
+            "instanceCount": 5,
+            "pixelCount": 182927,
+            "areaPercent": 8.821710586547852
+        },
+        {
+            "labelName": "nature--snow",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "nature--terrain",
+            "instanceCount": 9,
+            "pixelCount": 47164,
+            "areaPercent": 2.274498462677002
+        },
+        {
+            "labelName": "nature--vegetation",
+            "instanceCount": 21,
+            "pixelCount": 524641,
+            "areaPercent": 25.300973892211915
+        },
+        {
+            "labelName": "nature--water",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--banner",
+            "instanceCount": 7,
+            "pixelCount": 18581,
+            "areaPercent": 0.8960744738578796
+        },
+        {
+            "labelName": "object--bench",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--bike-rack",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--billboard",
+            "instanceCount": 10,
+            "pixelCount": 9777,
+            "areaPercent": 0.47149884700775149
+        },
+        {
+            "labelName": "object--catch-basin",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--cctv-camera",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--fire-hydrant",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--junction-box",
+            "instanceCount": 9,
+            "pixelCount": 19045,
+            "areaPercent": 0.9184510111808777
+        },
+        {
+            "labelName": "object--mailbox",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--manhole",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--phone-booth",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--pothole",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--street-light",
+            "instanceCount": 4,
+            "pixelCount": 863,
+            "areaPercent": 0.04161844030022621
+        },
+        {
+            "labelName": "object--support--pole",
+            "instanceCount": 27,
+            "pixelCount": 46479,
+            "areaPercent": 2.241464138031006
+        },
+        {
+            "labelName": "object--support--traffic-sign-frame",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--support--utility-pole",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--traffic-light",
+            "instanceCount": 10,
+            "pixelCount": 7549,
+            "areaPercent": 0.3640528619289398
+        },
+        {
+            "labelName": "object--traffic-sign--back",
+            "instanceCount": 4,
+            "pixelCount": 3958,
+            "areaPercent": 0.19087576866149903
+        },
+        {
+            "labelName": "object--traffic-sign--front",
+            "instanceCount": 15,
+            "pixelCount": 167797,
+            "areaPercent": 8.092061996459961
+        },
+        {
+            "labelName": "object--trash-can",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--vehicle--bicycle",
+            "instanceCount": 4,
+            "pixelCount": 3814,
+            "areaPercent": 0.18393132090568543
+        },
+        {
+            "labelName": "object--vehicle--boat",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--vehicle--bus",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--vehicle--car",
+            "instanceCount": 15,
+            "pixelCount": 73759,
+            "areaPercent": 3.5570504665374758
+        },
+        {
+            "labelName": "object--vehicle--caravan",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--vehicle--motorcycle",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--vehicle--on-rails",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--vehicle--other-vehicle",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--vehicle--trailer",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--vehicle--truck",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "object--vehicle--wheeled-slow",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "void--car-mount",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "void--ego-vehicle",
+            "instanceCount": 0,
+            "pixelCount": 0,
+            "areaPercent": 0.0
+        },
+        {
+            "labelName": "void--unlabeled",
+            "instanceCount": 1,
+            "pixelCount": 448,
+            "areaPercent": 0.021604938432574273
+        }
+    ]
+}
