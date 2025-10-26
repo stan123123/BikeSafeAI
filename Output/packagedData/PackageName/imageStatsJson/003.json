@@ -1,5 +1,5 @@
 {
-    "imageName": "001_colored-mask",
+    "imageName": "003",
     "labels": [
         {
             "labelName": "animal--bird",
@@ -15,21 +15,21 @@
         },
         {
             "labelName": "construction--barrier--curb",
-            "instanceCount": 8,
-            "pixelCount": 36965,
-            "areaPercent": 1.7826485633850098
+            "instanceCount": 9,
+            "pixelCount": 37279,
+            "areaPercent": 1.7977912425994874
         },
         {
             "labelName": "construction--barrier--fence",
             "instanceCount": 10,
-            "pixelCount": 40726,
-            "areaPercent": 1.9640239477157593
+            "pixelCount": 43575,
+            "areaPercent": 2.1014177799224855
         },
         {
             "labelName": "construction--barrier--guard-rail",
             "instanceCount": 6,
-            "pixelCount": 14926,
-            "areaPercent": 0.719810962677002
+            "pixelCount": 12484,
+            "areaPercent": 0.6020447611808777
         },
         {
             "labelName": "construction--barrier--other-barrier",
@@ -40,14 +40,14 @@
         {
             "labelName": "construction--barrier--wall",
             "instanceCount": 14,
-            "pixelCount": 110806,
-            "areaPercent": 5.343653678894043
+            "pixelCount": 113354,
+            "areaPercent": 5.466531753540039
         },
         {
             "labelName": "construction--flat--bike-lane",
             "instanceCount": 7,
-            "pixelCount": 18915,
-            "areaPercent": 0.9121817350387573
+            "pixelCount": 14997,
+            "areaPercent": 0.7232349514961243
         },
         {
             "labelName": "construction--flat--crosswalk-plain",
@@ -75,15 +75,15 @@
         },
         {
             "labelName": "construction--flat--rail-track",
-            "instanceCount": 6,
-            "pixelCount": 29126,
-            "areaPercent": 1.4046103954315186
+            "instanceCount": 5,
+            "pixelCount": 28351,
+            "areaPercent": 1.367235779762268
         },
         {
             "labelName": "construction--flat--road",
             "instanceCount": 25,
-            "pixelCount": 458495,
-            "areaPercent": 22.11106300354004
+            "pixelCount": 460353,
+            "areaPercent": 22.200666427612306
         },
         {
             "labelName": "construction--flat--service-lane",
@@ -94,32 +94,32 @@
         {
             "labelName": "construction--flat--sidewalk",
             "instanceCount": 14,
-            "pixelCount": 64824,
-            "areaPercent": 3.126157522201538
+            "pixelCount": 65992,
+            "areaPercent": 3.1824846267700197
         },
         {
             "labelName": "construction--structure--bridge",
             "instanceCount": 10,
-            "pixelCount": 6699,
-            "areaPercent": 0.32306134700775149
+            "pixelCount": 7335,
+            "areaPercent": 0.3537326455116272
         },
         {
             "labelName": "construction--structure--building",
-            "instanceCount": 9,
-            "pixelCount": 97153,
-            "areaPercent": 4.6852335929870609
+            "instanceCount": 8,
+            "pixelCount": 96516,
+            "areaPercent": 4.654513835906982
         },
         {
             "labelName": "construction--structure--tunnel",
-            "instanceCount": 0,
-            "pixelCount": 0,
-            "areaPercent": 0.0
+            "instanceCount": 1,
+            "pixelCount": 176,
+            "areaPercent": 0.00848765391856432
         },
         {
             "labelName": "human--person",
-            "instanceCount": 10,
-            "pixelCount": 9858,
-            "areaPercent": 0.47540509700775149
+            "instanceCount": 9,
+            "pixelCount": 7966,
+            "areaPercent": 0.3841628134250641
         },
         {
             "labelName": "human--rider--bicyclist",
@@ -142,14 +142,14 @@
         {
             "labelName": "marking--crosswalk-zebra",
             "instanceCount": 2,
-            "pixelCount": 3775,
-            "areaPercent": 0.18205054104328156
+            "pixelCount": 3908,
+            "areaPercent": 0.18846450746059419
         },
         {
             "labelName": "marking--general",
-            "instanceCount": 12,
-            "pixelCount": 73704,
-            "areaPercent": 3.5543980598449709
+            "instanceCount": 17,
+            "pixelCount": 74512,
+            "areaPercent": 3.5933642387390138
         },
         {
             "labelName": "nature--mountain",
@@ -166,8 +166,8 @@
         {
             "labelName": "nature--sky",
             "instanceCount": 5,
-            "pixelCount": 184296,
-            "areaPercent": 8.887731552124024
+            "pixelCount": 182927,
+            "areaPercent": 8.821710586547852
         },
         {
             "labelName": "nature--snow",
@@ -177,15 +177,15 @@
         },
         {
             "labelName": "nature--terrain",
-            "instanceCount": 8,
-            "pixelCount": 47258,
-            "areaPercent": 2.279031753540039
+            "instanceCount": 9,
+            "pixelCount": 47164,
+            "areaPercent": 2.274498462677002
         },
         {
             "labelName": "nature--vegetation",
-            "instanceCount": 20,
-            "pixelCount": 521122,
-            "areaPercent": 25.131269454956056
+            "instanceCount": 21,
+            "pixelCount": 524641,
+            "areaPercent": 25.300973892211915
         },
         {
             "labelName": "nature--water",
@@ -195,9 +195,9 @@
         },
         {
             "labelName": "object--banner",
-            "instanceCount": 8,
-            "pixelCount": 19648,
-            "areaPercent": 0.9475308656692505
+            "instanceCount": 7,
+            "pixelCount": 18581,
+            "areaPercent": 0.8960744738578796
         },
         {
             "labelName": "object--bench",
@@ -213,9 +213,9 @@
         },
         {
             "labelName": "object--billboard",
-            "instanceCount": 8,
-            "pixelCount": 26566,
-            "areaPercent": 1.2811535596847535
+            "instanceCount": 10,
+            "pixelCount": 9777,
+            "areaPercent": 0.47149884700775149
         },
         {
             "labelName": "object--catch-basin",
@@ -237,9 +237,9 @@
         },
         {
             "labelName": "object--junction-box",
-            "instanceCount": 8,
-            "pixelCount": 18058,
-            "areaPercent": 0.8708526492118836
+            "instanceCount": 9,
+            "pixelCount": 19045,
+            "areaPercent": 0.9184510111808777
         },
         {
             "labelName": "object--mailbox",
@@ -268,14 +268,14 @@
         {
             "labelName": "object--street-light",
             "instanceCount": 4,
-            "pixelCount": 614,
-            "areaPercent": 0.029610339552164079
+            "pixelCount": 863,
+            "areaPercent": 0.04161844030022621
         },
         {
             "labelName": "object--support--pole",
-            "instanceCount": 25,
-            "pixelCount": 44623,
-            "areaPercent": 2.1519579887390138
+            "instanceCount": 27,
+            "pixelCount": 46479,
+            "areaPercent": 2.241464138031006
         },
         {
             "labelName": "object--support--traffic-sign-frame",
@@ -291,21 +291,21 @@
         },
         {
             "labelName": "object--traffic-light",
-            "instanceCount": 8,
-            "pixelCount": 7268,
-            "areaPercent": 0.35050153732299807
+            "instanceCount": 10,
+            "pixelCount": 7549,
+            "areaPercent": 0.3640528619289398
         },
         {
             "labelName": "object--traffic-sign--back",
             "instanceCount": 4,
-            "pixelCount": 3885,
-            "areaPercent": 0.18735532462596894
+            "pixelCount": 3958,
+            "areaPercent": 0.19087576866149903
         },
         {
             "labelName": "object--traffic-sign--front",
-            "instanceCount": 14,
-            "pixelCount": 149924,
-            "areaPercent": 7.230131149291992
+            "instanceCount": 15,
+            "pixelCount": 167797,
+            "areaPercent": 8.092061996459961
         },
         {
             "labelName": "object--trash-can",
@@ -315,9 +315,9 @@
         },
         {
             "labelName": "object--vehicle--bicycle",
-            "instanceCount": 8,
-            "pixelCount": 8403,
-            "areaPercent": 0.40523725748062136
+            "instanceCount": 4,
+            "pixelCount": 3814,
+            "areaPercent": 0.18393132090568543
         },
         {
             "labelName": "object--vehicle--boat",
@@ -333,9 +333,9 @@
         },
         {
             "labelName": "object--vehicle--car",
-            "instanceCount": 17,
-            "pixelCount": 75963,
-            "areaPercent": 3.663339138031006
+            "instanceCount": 15,
+            "pixelCount": 73759,
+            "areaPercent": 3.5570504665374758
         },
         {
             "labelName": "object--vehicle--caravan",
@@ -393,9 +393,9 @@
         },
         {
             "labelName": "void--unlabeled",
-            "instanceCount": 0,
-            "pixelCount": 0,
-            "areaPercent": 0.0
+            "instanceCount": 1,
+            "pixelCount": 448,
+            "areaPercent": 0.021604938432574273
         }
     ]
 }

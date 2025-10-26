@@ -42,6 +42,9 @@ public class ImageProcesser : MonoBehaviour
 
     private ProcessingType processingType = ProcessingType.Annotation;
 
+    // Reference to the packager to get the package name
+    private ProcessingResultPackager packager;
+
     private void OnEnable()
     {
         OnProcessSelectSingleImage += ProcessSelectSingleImage;
@@ -60,6 +63,13 @@ public class ImageProcesser : MonoBehaviour
     {
         // Initialize all directories through the centralized config
         PathConfig.InitializeDirectories();
+
+        // Get reference to packager
+        packager = GetComponent<ProcessingResultPackager>();
+        if (packager == null)
+        {
+            packager = FindObjectOfType<ProcessingResultPackager>();
+        }
     }
 
     public void ChangeAmountOfImagesToProcessVideo(int newAmount)
@@ -88,6 +98,9 @@ public class ImageProcesser : MonoBehaviour
     {
         UIManager.RequestUIChange(UIManager.UIType.ProcessingImages);
 
+        // Initialize package folders once at the start
+        InitializePackageFolders();
+
         // Set progress for single image
         currentImageIndex = 1;
         totalImages = 1;
@@ -95,8 +108,10 @@ public class ImageProcesser : MonoBehaviour
 
         yield return StartCoroutine(ProcessImageWithAI(imagePath));
 
+        // Package this single image immediately after processing
+        yield return StartCoroutine(PackageSingleImageData(imagePath));
+
         UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
-        ProcessingResultPackager.RequestPackageData();
     }
 
     public void ProcessSelectFolderOfImages()
@@ -134,9 +149,12 @@ public class ImageProcesser : MonoBehaviour
     private IEnumerator ProcessFolderImagesAsync(string[] imageFiles)
     {
         UIManager.RequestUIChange(UIManager.UIType.ProcessingImages);
+
+        // Initialize package folders once at the start
+        InitializePackageFolders();
+
         yield return StartCoroutine(ProcessImageListAsync(imageFiles));
         UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
-        ProcessingResultPackager.RequestPackageData();
     }
 
     private IEnumerator ProcessImageListAsync(string[] imageFiles)
@@ -152,6 +170,9 @@ public class ImageProcesser : MonoBehaviour
 
             UnityEngine.Debug.Log($"[AI] Processing {Path.GetFileName(imageFiles[i])} ({currentImageIndex}/{totalImages})");
             yield return StartCoroutine(ProcessImageWithAI(imageFiles[i]));
+
+            // Package this image immediately after processing
+            yield return StartCoroutine(PackageSingleImageData(imageFiles[i]));
         }
 
         UnityEngine.Debug.Log("AI processing completed for all images.");
@@ -183,7 +204,7 @@ public class ImageProcesser : MonoBehaviour
                     yield break;
                 }
             }
-            yield return new WaitForSeconds(0.5f); // Check every half second instead of every frame
+            yield return new WaitForSeconds(0.5f);
         }
 
         // Timeout reached
@@ -222,7 +243,6 @@ public class ImageProcesser : MonoBehaviour
             proc.BeginOutputReadLine();
             proc.BeginErrorReadLine();
 
-            // Revert to original: yield return null
             while (!proc.HasExited)
                 yield return null;
 
@@ -244,6 +264,9 @@ public class ImageProcesser : MonoBehaviour
     private IEnumerator ProcessVideoFrames(string videoPath, int desiredFrames)
     {
         UIManager.RequestUIChange(UIManager.UIType.ProcessingImages);
+
+        // Initialize package folders once at the start
+        InitializePackageFolders();
 
         // Split video into frames first
         var vpGO = new GameObject("TempVP");
@@ -311,7 +334,6 @@ public class ImageProcesser : MonoBehaviour
         yield return StartCoroutine(ProcessImageListAsync(framesToProcess));
 
         UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
-        ProcessingResultPackager.RequestPackageData();
     }
 
     private IEnumerator ProcessImageWithAI(string imagePath)
@@ -350,6 +372,105 @@ public class ImageProcesser : MonoBehaviour
     {
         // Placeholder for future Anomaly Detection logic
         UnityEngine.Debug.Log($"Anomaly Detection would process: {imagePath}");
+        yield return null;
+    }
+
+    /// <summary>
+    /// Initializes the package folder structure once at the start of processing.
+    /// </summary>
+    private void InitializePackageFolders()
+    {
+        if (packager == null)
+        {
+            UnityEngine.Debug.LogWarning("No ProcessingResultPackager found. Cannot initialize package folders.");
+            return;
+        }
+
+        string packageName = packager.PackageName;
+        if (string.IsNullOrEmpty(packageName))
+            packageName = "UnnamedPackage";
+
+        // Create all package directories at once
+        PathConfig.CreatePackagedDataFolders(packageName);
+
+        UnityEngine.Debug.Log($"Initialized package folders for: {packageName}");
+    }
+
+    /// <summary>
+    /// Packages a single image immediately after processing.
+    /// Copies the source image and its annotated results, then generates JSON.
+    /// </summary>
+    private IEnumerator PackageSingleImageData(string originalImagePath)
+    {
+        if (packager == null)
+        {
+            UnityEngine.Debug.LogWarning("No ProcessingResultPackager found. Skipping packaging.");
+            yield break;
+        }
+
+        string packageName = packager.PackageName;
+        if (string.IsNullOrEmpty(packageName))
+            packageName = "UnnamedPackage";
+
+        // Note: Package directories are already created by InitializePackageFolders()
+        // No need to call CreatePackagedDataFolders again
+
+        string imageFileName = Path.GetFileName(originalImagePath);
+        string baseNameNoExt = Path.GetFileNameWithoutExtension(imageFileName);
+
+        // Copy the used image
+        string usedImageDest = Path.Combine(PathConfig.GetPackagedUsedImagesFolder(packageName), imageFileName);
+        if (File.Exists(originalImagePath))
+        {
+            File.Copy(originalImagePath, usedImageDest, true);
+        }
+
+        // Copy annotated images (colored mask, panoptic mask, etc.)
+        string[] annotatedFiles = Directory.GetFiles(PathConfig.AnnotatedImagesFolder, $"{baseNameNoExt}*.*");
+        foreach (string annotatedFile in annotatedFiles)
+        {
+            string annotatedDest = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(packageName), Path.GetFileName(annotatedFile));
+            File.Copy(annotatedFile, annotatedDest, true);
+        }
+
+        // Load the legend
+        var legend = ConfigLoader.GetLabels(ConfigLoader.LoadDefaultAnnotationConfig());
+
+        // Find and process the colored mask
+        string coloredMaskPath = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(packageName),
+                                              $"{baseNameNoExt}_colored-mask.png");
+
+        if (File.Exists(coloredMaskPath))
+        {
+            string panopticMaskPath = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(packageName),
+                                                   $"{baseNameNoExt}_panoptic-colored-mask.png");
+
+            // Load colored mask
+            byte[] coloredBytes = File.ReadAllBytes(coloredMaskPath);
+            Texture2D coloredTex = new Texture2D(2, 2);
+            coloredTex.LoadImage(coloredBytes);
+            coloredTex.name = baseNameNoExt;
+
+            // Load panoptic mask (if it exists)
+            Texture2D panopticTex = null;
+            if (File.Exists(panopticMaskPath))
+            {
+                byte[] panoBytes = File.ReadAllBytes(panopticMaskPath);
+                panopticTex = new Texture2D(2, 2);
+                panopticTex.LoadImage(panoBytes);
+            }
+
+            // Analyze and save JSON
+            var data = AnnotationAnalyzer.AnalyzeImage(coloredTex, legend, panopticTex);
+            AnnotationAnalyzer.SaveToJson(data, packageName);
+
+            UnityEngine.Debug.Log($"Packaged single image: {imageFileName}");
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning($"Colored mask not found for {imageFileName}. Skipping JSON generation.");
+        }
+
         yield return null;
     }
 }
