@@ -47,14 +47,15 @@ public class VideoSelectionUI : MonoBehaviour
 
     private void FrameInputEdited(string input)
     {
-        if (int.TryParse(input, out int frameCount))
+        if (float.TryParse(input, out float seconds))
         {
-            OnFrameInputChanged?.Invoke(frameCount);
-            imageProcesserRef.ChangeAmountOfImagesToProcessVideo(frameCount);
+            imageProcesserRef.ChangeAmountOfImagesToProcessVideo(seconds.ToString());
+
+            OnFrameInputChanged?.Invoke(Mathf.RoundToInt(seconds));
         }
         else
         {
-            Debug.LogError($"Invalid frame input: '{input}' is not a valid integer.");
+            Debug.LogError($"Invalid frame input: '{input}' is not a valid number.");
         }
     }
 }

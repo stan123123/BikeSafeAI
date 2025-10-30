@@ -1,7 +1,72 @@
 using System;
 using System.IO;
-using System.Collections.Generic;
+using System.Text;
+using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
+
+/// <summary>
+/// Represents a bounding box for an instance
+/// </summary>
+[Serializable]
+public struct BoundingBox
+{
+    public int minX;
+    public int minY;
+    public int maxX;
+    public int maxY;
+
+    public BoundingBox(int minX, int minY, int maxX, int maxY)
+    {
+        this.minX = minX;
+        this.minY = minY;
+        this.maxX = maxX;
+        this.maxY = maxY;
+    }
+
+    public int Width => maxX - minX;
+    public int Height => maxY - minY;
+}
+
+/// <summary>
+/// Represents the center position of an instance
+/// </summary>
+[Serializable]
+public struct InstancePosition
+{
+    public int x;
+    public int y;
+
+    public InstancePosition(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+/// <summary>
+/// Represents a single detected instance from the panoptic segmentation
+/// </summary>
+[Serializable]
+public class DetectedInstance
+{
+    public int id;
+    public int label_id;
+    public bool was_fused;
+    public float score;
+}
+
+/// <summary>
+/// Represents detailed information about a single instance including its location
+/// </summary>
+[Serializable]
+public class InstanceInfo
+{
+    public int id;
+    public float score;
+    public BoundingBox bbox;
+    public InstancePosition center;
+}
 
 /// <summary>
 /// Represents statistics for a single label within one annotated image.
@@ -10,9 +75,10 @@ using UnityEngine;
 public class LabelStats
 {
     public string labelName;
+    public int labelId;
     public int instanceCount;
-    public int pixelCount;
-    public float areaPercent;
+    public float averageScore;
+    public InstanceInfo[] instances = new InstanceInfo[0];
 }
 
 /// <summary>
@@ -22,6 +88,7 @@ public class LabelStats
 public class ImageAnnotationData
 {
     public string imageName;
+    public int totalInstances;
     public List<LabelStats> labels = new List<LabelStats>();
 }
 
@@ -62,7 +129,7 @@ public static class ConfigLoader
     {
         if (!File.Exists(filePath))
         {
-            Debug.LogError($"Config file not found: {filePath}");
+            UnityEngine.Debug.LogError($"Config file not found: {filePath}");
             return null;
         }
 
@@ -82,126 +149,283 @@ public static class ConfigLoader
     {
         return config?.labels?.ToArray();
     }
-}
 
+    /// <summary>
+    /// Gets a label by its ID from the config
+    /// </summary>
+    public static LabelData GetLabelById(ConfigData config, int labelId)
+    {
+        if (config?.labels == null) return null;
+
+        // Assuming label_id corresponds to the index in the labels array
+        if (labelId >= 0 && labelId < config.labels.Count)
+        {
+            return config.labels[labelId];
+        }
+
+        return null;
+    }
+}
 
 public static class AnnotationAnalyzer
 {
-    public static ImageAnnotationData AnalyzeImage(Texture2D coloredTexture, LabelData[] legend, Texture2D panopticTexture = null)
+    /// <summary>
+    /// Analyzes an image using the panoptic objects JSON and panoptic instance mask
+    /// to extract bounding boxes like the Python script does
+    /// </summary>
+    public static ImageAnnotationData AnalyzeImage(LabelData[] legend, string panopticObjectsJsonPath, string panopticInstanceMaskPath, string imageName = null)
     {
-        Color[] colorPixels = coloredTexture.GetPixels();
-        int totalPixels = colorPixels.Length;
-
-        var result = new ImageAnnotationData { imageName = coloredTexture.name };
-        var labelStats = new Dictionary<string, LabelStats>();
-
-        foreach (var label in legend)
-            labelStats[label.name] = new LabelStats { labelName = label.name };
-
-        // --- AREA CALCULATION ---
-        for (int i = 0; i < colorPixels.Length; i++)
+        var result = new ImageAnnotationData
         {
-            var pixel = colorPixels[i];
-            foreach (var label in legend)
+            imageName = imageName ?? Path.GetFileNameWithoutExtension(panopticObjectsJsonPath)
+        };
+
+        if (!File.Exists(panopticObjectsJsonPath))
+        {
+            UnityEngine.Debug.LogError($"Panoptic objects JSON not found: {panopticObjectsJsonPath}");
+            return result;
+        }
+
+        // Read and parse the JSON file
+        string jsonText = File.ReadAllText(panopticObjectsJsonPath);
+
+        DetectedInstance[] instances;
+        try
+        {
+            // Try to parse as array directly
+            instances = JsonHelper.FromJson<DetectedInstance>(jsonText);
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.LogError($"Failed to parse panoptic objects JSON: {panopticObjectsJsonPath}\n{e}");
+            return result;
+        }
+
+        if (instances == null || instances.Length == 0)
+        {
+            UnityEngine.Debug.LogWarning($"No instances found in {panopticObjectsJsonPath}");
+            return result;
+        }
+
+        result.totalInstances = instances.Length;
+
+        // DEBUG: Log instance IDs from JSON
+        UnityEngine.Debug.Log($"Found {instances.Length} instances in JSON with IDs: {string.Join(", ", instances.Select(i => i.id))}");
+
+        // Load the panoptic instance mask to extract bounding boxes
+        Dictionary<int, BoundingBox> bboxMap = new Dictionary<int, BoundingBox>();
+        if (File.Exists(panopticInstanceMaskPath))
+        {
+            bboxMap = ExtractBoundingBoxesFromMask(panopticInstanceMaskPath);
+
+            // DEBUG: Log instance IDs from mask
+            UnityEngine.Debug.Log($"Extracted {bboxMap.Count} bounding boxes with IDs: {string.Join(", ", bboxMap.Keys)}");
+
+            // DEBUG: Check for mismatches
+            var jsonIds = new HashSet<int>(instances.Select(i => i.id));
+            var maskIds = new HashSet<int>(bboxMap.Keys);
+            var missingInMask = jsonIds.Except(maskIds).ToList();
+            var extraInMask = maskIds.Except(jsonIds).ToList();
+
+            if (missingInMask.Count > 0)
             {
-                if (ColorsMatch(pixel, label.color))
-                {
-                    labelStats[label.name].pixelCount++;
-                    break;
-                }
+                UnityEngine.Debug.LogWarning($"Instance IDs in JSON but NOT in mask: {string.Join(", ", missingInMask)}");
+            }
+            if (extraInMask.Count > 0)
+            {
+                UnityEngine.Debug.LogWarning($"Instance IDs in mask but NOT in JSON: {string.Join(", ", extraInMask)}");
             }
         }
-
-        foreach (var label in legend)
+        else
         {
-            var stats = labelStats[label.name];
-            stats.areaPercent = (float)stats.pixelCount / totalPixels * 100f;
+            UnityEngine.Debug.LogWarning($"Panoptic instance mask not found: {panopticInstanceMaskPath}. Bounding boxes will not be calculated.");
         }
 
-        // --- INSTANCE COUNT (panoptic comparison) ---
-        if (panopticTexture != null)
+        // Create a config for label lookup
+        var config = new ConfigData { labels = legend.ToList() };
+
+        // Group instances by label_id
+        var groupedByLabel = instances.GroupBy(inst => inst.label_id);
+
+        foreach (var group in groupedByLabel)
         {
-            Color[] panopticPixels = panopticTexture.GetPixels();
+            int labelId = group.Key;
+            var instancesList = group.ToList();
 
-            foreach (var label in legend)
+            // Get label info from legend
+            LabelData labelInfo = ConfigLoader.GetLabelById(config, labelId);
+            string labelName = labelInfo != null ? labelInfo.name : $"Unknown_Label_{labelId}";
+
+            var instanceInfos = new List<InstanceInfo>();
+            foreach (var inst in instancesList)
             {
-                HashSet<int> uniqueInstanceColors = new HashSet<int>();
+                BoundingBox bbox = bboxMap.ContainsKey(inst.id) ? bboxMap[inst.id] : new BoundingBox(0, 0, 0, 0);
 
-                for (int i = 0; i < colorPixels.Length; i++)
+                // DEBUG: Log when bbox is not found
+                if (!bboxMap.ContainsKey(inst.id))
                 {
-                    // only check where this label exists in the colored mask
-                    if (!ColorsMatch(colorPixels[i], label.color))
-                        continue;
-
-                    Color p = panopticPixels[i];
-
-                    // Convert to 0–255 integer color (avoids float drift)
-                    int r = Mathf.RoundToInt(p.r * 255f);
-                    int g = Mathf.RoundToInt(p.g * 255f);
-                    int b = Mathf.RoundToInt(p.b * 255f);
-
-                    // combine into single int for hash comparison
-                    int colorKey = (r << 16) | (g << 8) | b;
-                    uniqueInstanceColors.Add(colorKey);
+                    UnityEngine.Debug.LogWarning($"Instance ID {inst.id} (label: {labelName}) not found in bboxMap!");
                 }
 
-                labelStats[label.name].instanceCount = uniqueInstanceColors.Count;
+                InstancePosition center = new InstancePosition(
+                    (bbox.minX + bbox.maxX) / 2,
+                    (bbox.minY + bbox.maxY) / 2
+                );
+
+                instanceInfos.Add(new InstanceInfo
+                {
+                    id = inst.id,
+                    score = inst.score,
+                    bbox = bbox,
+                    center = center
+                });
             }
+
+            var labelStat = new LabelStats
+            {
+                labelName = labelName,
+                labelId = labelId,
+                instanceCount = instancesList.Count,
+                averageScore = instancesList.Average(i => i.score),
+                instances = instanceInfos.ToArray()
+            };
+
+            result.labels.Add(labelStat);
         }
 
-        result.labels.AddRange(labelStats.Values);
         return result;
     }
 
-    private static bool ColorsMatch(Color c, int[] rgb, float tolerance = 0.01f)
+    private static Dictionary<int, BoundingBox> ExtractBoundingBoxesFromMask(string instanceMaskPath)
     {
-        return Mathf.Abs(c.r * 255 - rgb[0]) < tolerance * 255 &&
-               Mathf.Abs(c.g * 255 - rgb[1]) < tolerance * 255 &&
-               Mathf.Abs(c.b * 255 - rgb[2]) < tolerance * 255;
-    }
+        var bboxMap = new Dictionary<int, BoundingBox>();
 
-    // Proper comparer for Color in HashSet
-    private class ColorComparer : IEqualityComparer<Color>
-    {
-        public bool Equals(Color a, Color b)
+        try
         {
-            return Mathf.Abs(a.r - b.r) < 0.001f &&
-                   Mathf.Abs(a.g - b.g) < 0.001f &&
-                   Mathf.Abs(a.b - b.b) < 0.001f;
+            byte[] maskBytes = File.ReadAllBytes(instanceMaskPath);
+            Texture2D maskTex = new Texture2D(2, 2);
+
+            // Important: LoadImage can flip the texture depending on format
+            // We want to load it without any automatic processing
+            if (!maskTex.LoadImage(maskBytes))
+            {
+                UnityEngine.Debug.LogError($"Failed to load texture from: {instanceMaskPath}");
+                return bboxMap;
+            }
+
+            Color32[] pixels = maskTex.GetPixels32();
+            int width = maskTex.width;
+            int height = maskTex.height;
+
+            UnityEngine.Debug.Log($"Mask dimensions: {width}x{height}, Total pixels: {pixels.Length}");
+
+            var instancePositions = new Dictionary<int, (int minX, int minY, int maxX, int maxY)>();
+
+            // Sample first few pixels to see what we're getting
+            UnityEngine.Debug.Log($"First 5 pixels (raw): {string.Join(", ", pixels.Take(5).Select(p => $"R:{p.r} G:{p.g} B:{p.b}"))}");
+
+            // Unity's GetPixels32() returns pixels from bottom-left, going right then up
+            // We need to flip the Y coordinate to match the standard image coordinate system
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    // Calculate the correct pixel index
+                    // Unity uses bottom-left origin, so we need to flip Y
+                    int pixelIndex = (height - 1 - y) * width + x;
+                    Color32 pixel = pixels[pixelIndex];
+
+                    // Decode instance ID from RGB (matching Python encoding)
+                    int instanceId = pixel.r + (pixel.g << 8) + (pixel.b << 16);
+
+                    if (instanceId == 0) continue; // skip background
+
+                    if (!instancePositions.ContainsKey(instanceId))
+                    {
+                        instancePositions[instanceId] = (x, y, x, y);
+                    }
+                    else
+                    {
+                        var cur = instancePositions[instanceId];
+                        instancePositions[instanceId] = (
+                            Math.Min(cur.minX, x),
+                            Math.Min(cur.minY, y),
+                            Math.Max(cur.maxX, x),
+                            Math.Max(cur.maxY, y)
+                        );
+                    }
+                }
+            }
+
+            UnityEngine.Debug.Log($"Found {instancePositions.Count} unique instance IDs in mask");
+
+            // Sample some instance IDs and their bboxes
+            var sampleIds = instancePositions.Keys.Take(5).ToList();
+            UnityEngine.Debug.Log($"Sample instance IDs found: {string.Join(", ", sampleIds)}");
+
+            foreach (var kvp in instancePositions)
+            {
+                bboxMap[kvp.Key] = new BoundingBox(kvp.Value.minX, kvp.Value.minY, kvp.Value.maxX, kvp.Value.maxY);
+
+                // Log first few bboxes
+                if (kvp.Key <= 5)
+                {
+                    UnityEngine.Debug.Log($"Instance {kvp.Key} bbox: ({kvp.Value.minX}, {kvp.Value.minY}) to ({kvp.Value.maxX}, {kvp.Value.maxY})");
+                }
+            }
+
+            UnityEngine.Debug.Log($"Extracted {bboxMap.Count} bounding boxes from: {instanceMaskPath}");
+            UnityEngine.Object.Destroy(maskTex);
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.LogError($"Failed to extract bounding boxes: {e}");
         }
 
-        public int GetHashCode(Color c)
-        {
-            int r = Mathf.RoundToInt(c.r * 255);
-            int g = Mathf.RoundToInt(c.g * 255);
-            int b = Mathf.RoundToInt(c.b * 255);
-            return (r << 16) | (g << 8) | b;
-        }
+        return bboxMap;
     }
 
+    /// <summary>
+    /// Saves the analysis data to a JSON file in the package's imageStatsJson folder
+    /// </summary>
     public static void SaveToJson(ImageAnnotationData data, string packageName)
     {
-        string outputDir = PathConfig.GetPackagedImageStatsFolder(packageName);
+        // Save JSON to imageStatsJson folder
+        string outputFolder = PathConfig.GetPackagedImageStatsJsonFolder(packageName);
 
-        // Sanitize filename and remove ALL extensions (handles cases like .json, .png, etc.)
-        string baseName = data.imageName;
-
-        // Strip all extensions until we have just the base name
-        while (Path.HasExtension(baseName))
+        if (!Directory.Exists(outputFolder))
         {
-            baseName = Path.GetFileNameWithoutExtension(baseName);
+            Directory.CreateDirectory(outputFolder);
         }
 
-        // Sanitize path separators
-        string safeName = baseName
-            .Replace("/", "_")
-            .Replace("\\", "_");
-
-        string outputPath = Path.Combine(outputDir, $"{safeName}.json");
-
+        string outputPath = Path.Combine(outputFolder, $"{data.imageName}_analysis.json");
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(outputPath, json);
+        UnityEngine.Debug.Log($"Saved image analysis JSON: {outputPath}");
+    }
+}
 
-        Debug.Log($"Saved image statistics JSON: {outputPath}");
+/// <summary>
+/// Helper class for JSON array serialization (Unity's JsonUtility doesn't handle arrays well)
+/// </summary>
+static class JsonHelper
+{
+    public static T[] FromJson<T>(string json)
+    {
+        string newJson = "{ \"items\": " + json + "}";
+        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
+        return wrapper.items;
+    }
+
+    public static string ToJson<T>(T[] array, bool prettyPrint = false)
+    {
+        Wrapper<T> wrapper = new Wrapper<T> { items = array };
+        return JsonUtility.ToJson(wrapper, prettyPrint);
+    }
+
+    [Serializable]
+    private class Wrapper<T>
+    {
+        public T[] items;
     }
 }

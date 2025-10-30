@@ -1,0 +1,670 @@
+{
+    "imageName": "004",
+    "totalInstances": 36,
+    "labels": [
+        {
+            "labelName": "human--person",
+            "labelId": 19,
+            "instanceCount": 1,
+            "averageScore": 0.7211729884147644,
+            "instances": [
+                {
+                    "id": 1,
+                    "score": 0.7211729884147644,
+                    "bbox": {
+                        "minX": 1083,
+                        "minY": 452,
+                        "maxX": 1116,
+                        "maxY": 498
+                    },
+                    "center": {
+                        "x": 1099,
+                        "y": 475
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "construction--structure--building",
+            "labelId": 17,
+            "instanceCount": 1,
+            "averageScore": 0.9994869828224182,
+            "instances": [
+                {
+                    "id": 2,
+                    "score": 0.9994869828224182,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 192,
+                        "maxX": 1919,
+                        "maxY": 640
+                    },
+                    "center": {
+                        "x": 959,
+                        "y": 416
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "construction--barrier--fence",
+            "labelId": 3,
+            "instanceCount": 1,
+            "averageScore": 0.9306129813194275,
+            "instances": [
+                {
+                    "id": 3,
+                    "score": 0.9306129813194275,
+                    "bbox": {
+                        "minX": 57,
+                        "minY": 276,
+                        "maxX": 1758,
+                        "maxY": 620
+                    },
+                    "center": {
+                        "x": 907,
+                        "y": 448
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "construction--flat--rail-track",
+            "labelId": 12,
+            "instanceCount": 1,
+            "averageScore": 0.9940860271453857,
+            "instances": [
+                {
+                    "id": 4,
+                    "score": 0.9940860271453857,
+                    "bbox": {
+                        "minX": 1222,
+                        "minY": 533,
+                        "maxX": 1919,
+                        "maxY": 708
+                    },
+                    "center": {
+                        "x": 1570,
+                        "y": 620
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "construction--barrier--curb",
+            "labelId": 2,
+            "instanceCount": 1,
+            "averageScore": 0.9537109732627869,
+            "instances": [
+                {
+                    "id": 5,
+                    "score": 0.9537109732627869,
+                    "bbox": {
+                        "minX": 141,
+                        "minY": 508,
+                        "maxX": 1594,
+                        "maxY": 1056
+                    },
+                    "center": {
+                        "x": 867,
+                        "y": 782
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "nature--sky",
+            "labelId": 27,
+            "instanceCount": 1,
+            "averageScore": 0.9997360110282898,
+            "instances": [
+                {
+                    "id": 6,
+                    "score": 0.9997360110282898,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 0,
+                        "maxX": 1919,
+                        "maxY": 230
+                    },
+                    "center": {
+                        "x": 959,
+                        "y": 115
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--support--pole",
+            "labelId": 45,
+            "instanceCount": 8,
+            "averageScore": 0.8243593573570252,
+            "instances": [
+                {
+                    "id": 7,
+                    "score": 0.504298985004425,
+                    "bbox": {
+                        "minX": 980,
+                        "minY": 305,
+                        "maxX": 1035,
+                        "maxY": 467
+                    },
+                    "center": {
+                        "x": 1007,
+                        "y": 386
+                    }
+                },
+                {
+                    "id": 10,
+                    "score": 0.9687889814376831,
+                    "bbox": {
+                        "minX": 46,
+                        "minY": 349,
+                        "maxX": 81,
+                        "maxY": 621
+                    },
+                    "center": {
+                        "x": 63,
+                        "y": 485
+                    }
+                },
+                {
+                    "id": 12,
+                    "score": 0.5746129751205444,
+                    "bbox": {
+                        "minX": 922,
+                        "minY": 151,
+                        "maxX": 967,
+                        "maxY": 479
+                    },
+                    "center": {
+                        "x": 944,
+                        "y": 315
+                    }
+                },
+                {
+                    "id": 13,
+                    "score": 0.9885050058364868,
+                    "bbox": {
+                        "minX": 474,
+                        "minY": 457,
+                        "maxX": 496,
+                        "maxY": 660
+                    },
+                    "center": {
+                        "x": 485,
+                        "y": 558
+                    }
+                },
+                {
+                    "id": 18,
+                    "score": 0.989031970500946,
+                    "bbox": {
+                        "minX": 163,
+                        "minY": 294,
+                        "maxX": 200,
+                        "maxY": 677
+                    },
+                    "center": {
+                        "x": 181,
+                        "y": 485
+                    }
+                },
+                {
+                    "id": 28,
+                    "score": 0.9727619886398315,
+                    "bbox": {
+                        "minX": 971,
+                        "minY": 442,
+                        "maxX": 1001,
+                        "maxY": 641
+                    },
+                    "center": {
+                        "x": 986,
+                        "y": 541
+                    }
+                },
+                {
+                    "id": 32,
+                    "score": 0.9483349919319153,
+                    "bbox": {
+                        "minX": 1342,
+                        "minY": 160,
+                        "maxX": 1409,
+                        "maxY": 459
+                    },
+                    "center": {
+                        "x": 1375,
+                        "y": 309
+                    }
+                },
+                {
+                    "id": 36,
+                    "score": 0.6485400199890137,
+                    "bbox": {
+                        "minX": 363,
+                        "minY": 187,
+                        "maxX": 387,
+                        "maxY": 484
+                    },
+                    "center": {
+                        "x": 375,
+                        "y": 335
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--vehicle--car",
+            "labelId": 55,
+            "instanceCount": 3,
+            "averageScore": 0.9627540111541748,
+            "instances": [
+                {
+                    "id": 8,
+                    "score": 0.9996309876441956,
+                    "bbox": {
+                        "minX": 1017,
+                        "minY": 729,
+                        "maxX": 1333,
+                        "maxY": 884
+                    },
+                    "center": {
+                        "x": 1175,
+                        "y": 806
+                    }
+                },
+                {
+                    "id": 9,
+                    "score": 0.8901939988136292,
+                    "bbox": {
+                        "minX": 1640,
+                        "minY": 434,
+                        "maxX": 1774,
+                        "maxY": 486
+                    },
+                    "center": {
+                        "x": 1707,
+                        "y": 460
+                    }
+                },
+                {
+                    "id": 35,
+                    "score": 0.9984369874000549,
+                    "bbox": {
+                        "minX": 834,
+                        "minY": 632,
+                        "maxX": 1061,
+                        "maxY": 757
+                    },
+                    "center": {
+                        "x": 947,
+                        "y": 694
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--junction-box",
+            "labelId": 39,
+            "instanceCount": 3,
+            "averageScore": 0.78370600938797,
+            "instances": [
+                {
+                    "id": 11,
+                    "score": 0.906324028968811,
+                    "bbox": {
+                        "minX": 1750,
+                        "minY": 523,
+                        "maxX": 1865,
+                        "maxY": 624
+                    },
+                    "center": {
+                        "x": 1807,
+                        "y": 573
+                    }
+                },
+                {
+                    "id": 21,
+                    "score": 0.6524050235748291,
+                    "bbox": {
+                        "minX": 1523,
+                        "minY": 491,
+                        "maxX": 1591,
+                        "maxY": 578
+                    },
+                    "center": {
+                        "x": 1557,
+                        "y": 534
+                    }
+                },
+                {
+                    "id": 29,
+                    "score": 0.7923889756202698,
+                    "bbox": {
+                        "minX": 1863,
+                        "minY": 587,
+                        "maxX": 1919,
+                        "maxY": 649
+                    },
+                    "center": {
+                        "x": 1891,
+                        "y": 618
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "marking--general",
+            "labelId": 24,
+            "instanceCount": 1,
+            "averageScore": 0.9980379939079285,
+            "instances": [
+                {
+                    "id": 14,
+                    "score": 0.9980379939079285,
+                    "bbox": {
+                        "minX": 25,
+                        "minY": 462,
+                        "maxX": 1595,
+                        "maxY": 1066
+                    },
+                    "center": {
+                        "x": 810,
+                        "y": 764
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "construction--barrier--wall",
+            "labelId": 6,
+            "instanceCount": 1,
+            "averageScore": 0.7487779855728149,
+            "instances": [
+                {
+                    "id": 15,
+                    "score": 0.7487779855728149,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 297,
+                        "maxX": 1845,
+                        "maxY": 1079
+                    },
+                    "center": {
+                        "x": 922,
+                        "y": 688
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--support--utility-pole",
+            "labelId": 47,
+            "instanceCount": 1,
+            "averageScore": 0.6726599931716919,
+            "instances": [
+                {
+                    "id": 16,
+                    "score": 0.6726599931716919,
+                    "bbox": {
+                        "minX": 580,
+                        "minY": 225,
+                        "maxX": 601,
+                        "maxY": 458
+                    },
+                    "center": {
+                        "x": 590,
+                        "y": 341
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--banner",
+            "labelId": 32,
+            "instanceCount": 1,
+            "averageScore": 0.8309919834136963,
+            "instances": [
+                {
+                    "id": 17,
+                    "score": 0.8309919834136963,
+                    "bbox": {
+                        "minX": 73,
+                        "minY": 402,
+                        "maxX": 169,
+                        "maxY": 666
+                    },
+                    "center": {
+                        "x": 121,
+                        "y": 534
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "construction--flat--sidewalk",
+            "labelId": 15,
+            "instanceCount": 1,
+            "averageScore": 0.9567070007324219,
+            "instances": [
+                {
+                    "id": 19,
+                    "score": 0.9567070007324219,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 424,
+                        "maxX": 1838,
+                        "maxY": 920
+                    },
+                    "center": {
+                        "x": 919,
+                        "y": 672
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--traffic-sign--back",
+            "labelId": 49,
+            "instanceCount": 1,
+            "averageScore": 0.924901008605957,
+            "instances": [
+                {
+                    "id": 20,
+                    "score": 0.924901008605957,
+                    "bbox": {
+                        "minX": 699,
+                        "minY": 317,
+                        "maxX": 794,
+                        "maxY": 364
+                    },
+                    "center": {
+                        "x": 746,
+                        "y": 340
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--traffic-sign--front",
+            "labelId": 50,
+            "instanceCount": 5,
+            "averageScore": 0.7590798139572144,
+            "instances": [
+                {
+                    "id": 22,
+                    "score": 0.9440209865570068,
+                    "bbox": {
+                        "minX": 44,
+                        "minY": 830,
+                        "maxX": 254,
+                        "maxY": 1036
+                    },
+                    "center": {
+                        "x": 149,
+                        "y": 933
+                    }
+                },
+                {
+                    "id": 23,
+                    "score": 0.5879330039024353,
+                    "bbox": {
+                        "minX": 1593,
+                        "minY": 868,
+                        "maxX": 1919,
+                        "maxY": 1079
+                    },
+                    "center": {
+                        "x": 1756,
+                        "y": 973
+                    }
+                },
+                {
+                    "id": 27,
+                    "score": 0.9548109769821167,
+                    "bbox": {
+                        "minX": 683,
+                        "minY": 696,
+                        "maxX": 708,
+                        "maxY": 714
+                    },
+                    "center": {
+                        "x": 695,
+                        "y": 705
+                    }
+                },
+                {
+                    "id": 33,
+                    "score": 0.53473299741745,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 0,
+                        "maxX": 1896,
+                        "maxY": 49
+                    },
+                    "center": {
+                        "x": 948,
+                        "y": 24
+                    }
+                },
+                {
+                    "id": 34,
+                    "score": 0.7739009857177734,
+                    "bbox": {
+                        "minX": 683,
+                        "minY": 692,
+                        "maxX": 726,
+                        "maxY": 798
+                    },
+                    "center": {
+                        "x": 704,
+                        "y": 745
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--traffic-light",
+            "labelId": 48,
+            "instanceCount": 1,
+            "averageScore": 0.709306001663208,
+            "instances": [
+                {
+                    "id": 24,
+                    "score": 0.709306001663208,
+                    "bbox": {
+                        "minX": 463,
+                        "minY": 471,
+                        "maxX": 504,
+                        "maxY": 534
+                    },
+                    "center": {
+                        "x": 483,
+                        "y": 502
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--vehicle--bicycle",
+            "labelId": 52,
+            "instanceCount": 2,
+            "averageScore": 0.8077884912490845,
+            "instances": [
+                {
+                    "id": 25,
+                    "score": 0.9226099848747253,
+                    "bbox": {
+                        "minX": 653,
+                        "minY": 439,
+                        "maxX": 711,
+                        "maxY": 481
+                    },
+                    "center": {
+                        "x": 682,
+                        "y": 460
+                    }
+                },
+                {
+                    "id": 26,
+                    "score": 0.6929669976234436,
+                    "bbox": {
+                        "minX": 859,
+                        "minY": 525,
+                        "maxX": 931,
+                        "maxY": 636
+                    },
+                    "center": {
+                        "x": 895,
+                        "y": 580
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "nature--vegetation",
+            "labelId": 30,
+            "instanceCount": 1,
+            "averageScore": 0.9992690086364746,
+            "instances": [
+                {
+                    "id": 30,
+                    "score": 0.9992690086364746,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 43,
+                        "maxX": 1919,
+                        "maxY": 879
+                    },
+                    "center": {
+                        "x": 959,
+                        "y": 461
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "construction--flat--road",
+            "labelId": 13,
+            "instanceCount": 1,
+            "averageScore": 0.995468020439148,
+            "instances": [
+                {
+                    "id": 31,
+                    "score": 0.995468020439148,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 355,
+                        "maxX": 1853,
+                        "maxY": 1079
+                    },
+                    "center": {
+                        "x": 926,
+                        "y": 717
+                    }
+                }
+            ]
+        }
+    ]
+}

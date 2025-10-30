@@ -25,7 +25,7 @@ public class ImageProcesser : MonoBehaviour
     public static void RequestProcessFolderOfImages() => OnProcessSelectFolderOfImages?.Invoke();
     public static void RequestProcessVideoFrames() => OnSelectVideoAndProcessFrames?.Invoke();
 
-    int amountOfImagesToProcessVideo = 4;
+    float deltaSecondsPerFrameOfVideo = 1;
 
     // Request current progress info (for polling if needed)
     public static void GetCurrentProgress(out int current, out int total)
@@ -72,9 +72,12 @@ public class ImageProcesser : MonoBehaviour
         }
     }
 
-    public void ChangeAmountOfImagesToProcessVideo(int newAmount)
+    public void ChangeAmountOfImagesToProcessVideo(string newValue)
     {
-        amountOfImagesToProcessVideo = newAmount;
+        if (float.TryParse(newValue, out float newAmount))
+            deltaSecondsPerFrameOfVideo = Mathf.Max(0.01f, newAmount);
+        else
+            UnityEngine.Debug.LogWarning($"Invalid number entered: {newValue}");
     }
 
     public void ProcessSelectSingleImage()
@@ -187,7 +190,7 @@ public class ImageProcesser : MonoBehaviour
 
         string videoPath = paths[0];
 
-        StartCoroutine(ProcessVideoFrames(videoPath, amountOfImagesToProcessVideo));
+        StartCoroutine(ProcessVideoFrames(videoPath, deltaSecondsPerFrameOfVideo));
     }
 
     private IEnumerator WaitForFramesFolder(string folder, int expectedFrameCount, float timeoutSeconds = 30f)
@@ -261,14 +264,12 @@ public class ImageProcesser : MonoBehaviour
         }
     }
 
-    private IEnumerator ProcessVideoFrames(string videoPath, int desiredFrames)
+    private IEnumerator ProcessVideoFrames(string videoPath, float deltaSecondsPerFrame)
     {
         UIManager.RequestUIChange(UIManager.UIType.ProcessingImages);
-
-        // Initialize package folders once at the start
         InitializePackageFolders();
 
-        // Split video into frames first
+        // Get video duration
         var vpGO = new GameObject("TempVP");
         var vp = vpGO.AddComponent<VideoPlayer>();
         vp.url = videoPath;
@@ -277,7 +278,12 @@ public class ImageProcesser : MonoBehaviour
         double duration = vp.length;
         Destroy(vpGO);
 
-        double fps = Math.Max(0.0001, desiredFrames / duration);
+        // Calculate FPS: 1 frame per deltaSecondsPerFrame seconds
+        double fps = 1.0 / deltaSecondsPerFrame;
+
+        // Calculate expected number of frames
+        int expectedFrameCount = Mathf.CeilToInt((float)duration / deltaSecondsPerFrame);
+
         string batchPath = Path.Combine(PathConfig.FrameExtractorPath, "extract_frames.bat");
         if (!File.Exists(batchPath))
         {
@@ -299,11 +305,11 @@ public class ImageProcesser : MonoBehaviour
         string workingDir = Path.GetDirectoryName(batchPath);
 
         // Extract frames and wait for completion
-        UnityEngine.Debug.Log("Extracting frames from video...");
+        UnityEngine.Debug.Log($"Extracting frames from video (1 frame every {deltaSecondsPerFrame} seconds, ~{expectedFrameCount} frames expected)...");
         yield return StartCoroutine(RunProcessAsync(startInfo, workingDir));
-        yield return StartCoroutine(WaitForFramesFolder(PathConfig.UsedImagesFolder, desiredFrames, 30f));
+        yield return StartCoroutine(WaitForFramesFolder(PathConfig.UsedImagesFolder, expectedFrameCount, 30f));
 
-        // Now get all extracted frames
+        // Get all extracted frames (already at correct interval from FFmpeg)
         string[] allFrames = Directory.GetFiles(PathConfig.UsedImagesFolder, "frame_*.png")
                                      .OrderBy(x => x).ToArray();
 
@@ -314,24 +320,10 @@ public class ImageProcesser : MonoBehaviour
             yield break;
         }
 
-        UnityEngine.Debug.Log($"Found {allFrames.Length} frames. Selecting {desiredFrames} for processing...");
+        UnityEngine.Debug.Log($"Found {allFrames.Length} frames. Processing all frames...");
 
-        // Select frames to process
-        string[] framesToProcess;
-        if (desiredFrames >= allFrames.Length)
-        {
-            framesToProcess = allFrames;
-        }
-        else
-        {
-            framesToProcess = new string[desiredFrames];
-            float step = (allFrames.Length - 1) / (float)(desiredFrames - 1);
-            for (int i = 0; i < desiredFrames; i++)
-                framesToProcess[i] = allFrames[Mathf.RoundToInt(i * step)];
-        }
-
-        // Use the same processing loop as folder processing
-        yield return StartCoroutine(ProcessImageListAsync(framesToProcess));
+        // Process all extracted frames (no selection needed - FFmpeg already did the interval spacing)
+        yield return StartCoroutine(ProcessImageListAsync(allFrames));
 
         UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
     }
@@ -412,63 +404,92 @@ public class ImageProcesser : MonoBehaviour
         if (string.IsNullOrEmpty(packageName))
             packageName = "UnnamedPackage";
 
-        // Note: Package directories are already created by InitializePackageFolders()
-        // No need to call CreatePackagedDataFolders again
-
         string imageFileName = Path.GetFileName(originalImagePath);
         string baseNameNoExt = Path.GetFileNameWithoutExtension(imageFileName);
 
-        // Copy the used image
+        // Copy the original used image
         string usedImageDest = Path.Combine(PathConfig.GetPackagedUsedImagesFolder(packageName), imageFileName);
         if (File.Exists(originalImagePath))
         {
             File.Copy(originalImagePath, usedImageDest, true);
         }
 
-        // Copy annotated images (colored mask, panoptic mask, etc.)
-        string[] annotatedFiles = Directory.GetFiles(PathConfig.AnnotatedImagesFolder, $"{baseNameNoExt}*.*");
-        foreach (string annotatedFile in annotatedFiles)
+        // Define the specific files we need to copy to annotatedImages
+        string panopticFusedMaskName = $"{baseNameNoExt}_panoptic-fused-colored-mask.png";
+        string panopticColoredMaskName = $"{baseNameNoExt}_panoptic-colored-mask.png";
+        string panopticInstanceMaskName = $"{baseNameNoExt}_panoptic-mask.png";
+        string panopticObjectsJsonName = $"{baseNameNoExt}_panoptic-colored-mask_objects.json";
+
+        // Copy panoptic-fused-colored-mask to annotatedImages
+        string panopticFusedSource = Path.Combine(PathConfig.AnnotatedImagesFolder, panopticFusedMaskName);
+        string panopticFusedDest = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(packageName), panopticFusedMaskName);
+        if (File.Exists(panopticFusedSource))
         {
-            string annotatedDest = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(packageName), Path.GetFileName(annotatedFile));
-            File.Copy(annotatedFile, annotatedDest, true);
+            File.Copy(panopticFusedSource, panopticFusedDest, true);
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning($"Panoptic fused mask not found: {panopticFusedSource}");
+        }
+
+        // Copy panoptic-colored-mask to annotatedImages
+        string panopticColoredSource = Path.Combine(PathConfig.AnnotatedImagesFolder, panopticColoredMaskName);
+        string panopticColoredDest = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(packageName), panopticColoredMaskName);
+        if (File.Exists(panopticColoredSource))
+        {
+            File.Copy(panopticColoredSource, panopticColoredDest, true);
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning($"Panoptic colored mask not found: {panopticColoredSource}");
+        }
+
+        // Copy panoptic-mask (instance mask for bbox extraction) to annotatedImages
+        string panopticInstanceSource = Path.Combine(PathConfig.AnnotatedImagesFolder, panopticInstanceMaskName);
+        string panopticInstanceDest = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(packageName), panopticInstanceMaskName);
+        if (File.Exists(panopticInstanceSource))
+        {
+            File.Copy(panopticInstanceSource, panopticInstanceDest, true);
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning($"Panoptic instance mask not found: {panopticInstanceSource}");
+        }
+
+        // Copy the panoptic objects JSON file to annotatedImages
+        string panopticObjectsSource = Path.Combine(PathConfig.AnnotatedImagesFolder, panopticObjectsJsonName);
+        string panopticObjectsDest = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(packageName), panopticObjectsJsonName);
+        if (File.Exists(panopticObjectsSource))
+        {
+            File.Copy(panopticObjectsSource, panopticObjectsDest, true);
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning($"Panoptic objects JSON not found: {panopticObjectsSource}. Skipping analysis.");
+            yield break;
         }
 
         // Load the legend
         var legend = ConfigLoader.GetLabels(ConfigLoader.LoadDefaultAnnotationConfig());
 
-        // Find and process the colored mask
-        string coloredMaskPath = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(packageName),
-                                              $"{baseNameNoExt}_colored-mask.png");
-
-        if (File.Exists(coloredMaskPath))
+        if (legend == null || legend.Length == 0)
         {
-            string panopticMaskPath = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(packageName),
-                                                   $"{baseNameNoExt}_panoptic-colored-mask.png");
+            UnityEngine.Debug.LogError("Failed to load label legend. Cannot analyze image.");
+            yield break;
+        }
 
-            // Load colored mask
-            byte[] coloredBytes = File.ReadAllBytes(coloredMaskPath);
-            Texture2D coloredTex = new Texture2D(2, 2);
-            coloredTex.LoadImage(coloredBytes);
-            coloredTex.name = baseNameNoExt;
-
-            // Load panoptic mask (if it exists)
-            Texture2D panopticTex = null;
-            if (File.Exists(panopticMaskPath))
-            {
-                byte[] panoBytes = File.ReadAllBytes(panopticMaskPath);
-                panopticTex = new Texture2D(2, 2);
-                panopticTex.LoadImage(panoBytes);
-            }
-
-            // Analyze and save JSON
-            var data = AnnotationAnalyzer.AnalyzeImage(coloredTex, legend, panopticTex);
+        // FIXED: Use panopticInstanceDest (raw mask) instead of panopticColoredDest (visualization)
+        // Analyze using the panoptic objects JSON and RAW panoptic-mask for bounding boxes
+        // Save results to imageStatsJson folder
+        if (File.Exists(panopticObjectsDest) && File.Exists(panopticInstanceDest))
+        {
+            var data = AnnotationAnalyzer.AnalyzeImage(legend, panopticObjectsDest, panopticInstanceDest, baseNameNoExt);
             AnnotationAnalyzer.SaveToJson(data, packageName);
-
-            UnityEngine.Debug.Log($"Packaged single image: {imageFileName}");
+            UnityEngine.Debug.Log($"Packaged single image: {imageFileName} with {data.totalInstances} instances across {data.labels.Count} label types");
         }
         else
         {
-            UnityEngine.Debug.LogWarning($"Colored mask not found for {imageFileName}. Skipping JSON generation.");
+            UnityEngine.Debug.LogWarning($"Could not find required files for analysis. Objects JSON: {File.Exists(panopticObjectsDest)}, Panoptic Instance Mask: {File.Exists(panopticInstanceDest)}");
         }
 
         yield return null;

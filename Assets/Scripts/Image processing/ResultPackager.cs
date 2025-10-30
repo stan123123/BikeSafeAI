@@ -48,33 +48,40 @@ public class ProcessingResultPackager : MonoBehaviour
 
         var legend = ConfigLoader.GetLabels(ConfigLoader.LoadDefaultAnnotationConfig());
 
-        // Process only *_colored-mask.png images
-        foreach (string coloredMaskPath in Directory.GetFiles(PathConfig.GetPackagedAnnotatedImagesFolder(PackageName))
-                                                     .Where(f => f.EndsWith("_colored-mask.png")))
+        if (legend == null || legend.Length == 0)
         {
-            string baseName = Path.GetFileNameWithoutExtension(coloredMaskPath).Replace("_colored-mask", "");
-            string panopticMaskPath = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(PackageName),
-                                                   baseName + "_panoptic-colored-mask.png");
+            Debug.LogError("Failed to load label legend. Cannot analyze images.");
+            return;
+        }
 
-            // Load colored mask
-            byte[] coloredBytes = File.ReadAllBytes(coloredMaskPath);
-            Texture2D coloredTex = new Texture2D(2, 2);
-            coloredTex.LoadImage(coloredBytes);
-            coloredTex.name = Path.GetFileNameWithoutExtension(coloredMaskPath);
+        // Process only *_panoptic-colored-mask_objects.json files
+        string annotatedFolder = PathConfig.GetPackagedAnnotatedImagesFolder(PackageName);
+        foreach (string objectsJsonPath in Directory.GetFiles(annotatedFolder)
+                                                     .Where(f => f.EndsWith("_panoptic-colored-mask_objects.json")))
+        {
+            // Extract base name from the objects JSON filename
+            string fileName = Path.GetFileNameWithoutExtension(objectsJsonPath);
+            // Remove the "_panoptic-colored-mask_objects" suffix to get base name
+            string baseName = fileName.Replace("_panoptic-colored-mask_objects", "");
 
-            // Load panoptic mask (if it exists)
-            Texture2D panopticTex = null;
-            if (File.Exists(panopticMaskPath))
+            // Verify that the corresponding panoptic masks exist
+            string panopticFusedMaskPath = Path.Combine(annotatedFolder, baseName + "_panoptic-fused-colored-mask.png");
+            string panopticColoredMaskPath = Path.Combine(annotatedFolder, baseName + "_panoptic-colored-mask.png");
+
+            bool hasFusedMask = File.Exists(panopticFusedMaskPath);
+            bool hasColoredMask = File.Exists(panopticColoredMaskPath);
+
+            if (!hasFusedMask && !hasColoredMask)
             {
-                byte[] panoBytes = File.ReadAllBytes(panopticMaskPath);
-                panopticTex = new Texture2D(2, 2);
-                panopticTex.LoadImage(panoBytes);
+                Debug.LogWarning($"No panoptic masks found for {baseName}. Skipping analysis.");
+                continue;
             }
 
-            var data = AnnotationAnalyzer.AnalyzeImage(coloredTex, legend, panopticTex);
-
-            // FIXED: Pass only the PackageName, not the full path
+            // Analyze using the panoptic objects JSON
+            var data = AnnotationAnalyzer.AnalyzeImage(legend, objectsJsonPath, baseName);
             AnnotationAnalyzer.SaveToJson(data, PackageName);
+
+            Debug.Log($"Analyzed {baseName}: {data.totalInstances} instances across {data.labels.Count} label types");
         }
 
         Debug.Log($"Packaged data for '{PackageName}' successfully!");
