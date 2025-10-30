@@ -83,6 +83,11 @@ public static class PathConfig
         return packageRoot;
     }
 
+    public static string GetPackagedImageStatsJsonFolder(string packageName)
+    {
+        return Path.Combine(OutputFolder, "packagedData", packageName, "imageStatsJson");
+    }
+
     public static string GetPackagedImageStatsFolder(string packageName)
         => Path.Combine(OutputFolder, "packagedData", packageName, "imageStatsJson");
 
