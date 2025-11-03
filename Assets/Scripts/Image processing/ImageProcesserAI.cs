@@ -99,7 +99,7 @@ public class ImageProcesser : MonoBehaviour
 
     private IEnumerator ProcessSingleImageAsync(string imagePath)
     {
-        UIManager.RequestUIChange(UIManager.UIType.ProcessingImages);
+        UIManager.RequestUIChange(1);
 
         // Initialize package folders once at the start
         InitializePackageFolders();
@@ -114,7 +114,7 @@ public class ImageProcesser : MonoBehaviour
         // Package this single image immediately after processing
         yield return StartCoroutine(PackageSingleImageData(imagePath));
 
-        UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
+        UIManager.RequestUIChange(2);
     }
 
     public void ProcessSelectFolderOfImages()
@@ -151,13 +151,13 @@ public class ImageProcesser : MonoBehaviour
 
     private IEnumerator ProcessFolderImagesAsync(string[] imageFiles)
     {
-        UIManager.RequestUIChange(UIManager.UIType.ProcessingImages);
+        UIManager.RequestUIChange(1);
 
         // Initialize package folders once at the start
         InitializePackageFolders();
 
         yield return StartCoroutine(ProcessImageListAsync(imageFiles));
-        UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
+        UIManager.RequestUIChange(2);
     }
 
     private IEnumerator ProcessImageListAsync(string[] imageFiles)
@@ -266,7 +266,7 @@ public class ImageProcesser : MonoBehaviour
 
     private IEnumerator ProcessVideoFrames(string videoPath, float deltaSecondsPerFrame)
     {
-        UIManager.RequestUIChange(UIManager.UIType.ProcessingImages);
+        UIManager.RequestUIChange(1);
         InitializePackageFolders();
 
         // Get video duration
@@ -288,7 +288,7 @@ public class ImageProcesser : MonoBehaviour
         if (!File.Exists(batchPath))
         {
             UnityEngine.Debug.LogError($"extract_frames.bat not found at {batchPath}");
-            UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
+            UIManager.RequestUIChange(2);
             yield break;
         }
 
@@ -316,7 +316,7 @@ public class ImageProcesser : MonoBehaviour
         if (allFrames.Length == 0)
         {
             UnityEngine.Debug.LogWarning("No frames found in folder after extraction!");
-            UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
+            UIManager.RequestUIChange(2);
             yield break;
         }
 
@@ -325,7 +325,7 @@ public class ImageProcesser : MonoBehaviour
         // Process all extracted frames (no selection needed - FFmpeg already did the interval spacing)
         yield return StartCoroutine(ProcessImageListAsync(allFrames));
 
-        UIManager.RequestUIChange(UIManager.UIType.DoneProcessing);
+        UIManager.RequestUIChange(2);
     }
 
     private IEnumerator ProcessImageWithAI(string imagePath)

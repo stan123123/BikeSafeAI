@@ -35,7 +35,7 @@ public class VideoSelectionUI : MonoBehaviour
     {
         OnBackButtonClicked?.Invoke();
 
-        UIManager.RequestUIChange(UIManager.UIType.SelectFile);
+        UIManager.RequestUIChange(0);
     }
 
     private void SelectVideoClicked()

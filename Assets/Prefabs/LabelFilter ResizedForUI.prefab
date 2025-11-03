@@ -1,0 +1,226 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6632895528945484564
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2935020671564671091, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935020671564671091, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935020671564671091, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3675956468267857282}
+    - target: {fileID: 2935020671564671091, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935020671564671091, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: setMaxAmountOfObjects
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935020671564671091, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LabelFilterUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935020671564671091, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060146458396740019, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060146458396740019, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060146458396740019, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3675956468267857282}
+    - target: {fileID: 3060146458396740019, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060146458396740019, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetDesiredAccuracy
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060146458396740019, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LabelFilterUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060146458396740019, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3675956468267857282}
+    - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: setShouldInclude
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LabelFilterUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4784070538678506782, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_Name
+      value: InputField_DesiredAccuracy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6230995809181876087, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6230995809181876087, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6230995809181876087, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3675956468267857282}
+    - target: {fileID: 6230995809181876087, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6230995809181876087, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: setMinAmountOfObjects
+      objectReference: {fileID: 0}
+    - target: {fileID: 6230995809181876087, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LabelFilterUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6230995809181876087, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 348.6182
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 102.8522
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874568016018246240, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7692612770072913492, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_Name
+      value: LabelFilter (1) Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+--- !u!114 &3675956468267857282 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8002713717319218838, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+  m_PrefabInstance: {fileID: 6632895528945484564}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94c881b9c7260984796e5ac642d8fb93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LabelFilterUI
