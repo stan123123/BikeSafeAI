@@ -5,6 +5,8 @@ public class DataPreviewPanel : MonoBehaviour
 {
     [SerializeField] GameObject DataPreviewColorPrefab;
 
+    private int darkestColorCount = 4;
+
     /// <summary>
     /// Initializes the panel by spawning color indicators based on integer values.
     /// </summary>
@@ -20,7 +22,7 @@ public class DataPreviewPanel : MonoBehaviour
         foreach (int value in values)
         {
             // Clamp value between 0 and 20 to avoid errors
-            int clampedValue = Mathf.Clamp(value, 0, 20);
+            int clampedValue = Mathf.Clamp(value, 0, darkestColorCount);
 
             // Instantiate the prefab as a child
             GameObject instance = Instantiate(DataPreviewColorPrefab, transform);
@@ -30,7 +32,7 @@ public class DataPreviewPanel : MonoBehaviour
             if (img != null)
             {
                 // Calculate red intensity from 0 (black) to 1 (full red)
-                float redIntensity = clampedValue / 20f;
+                float redIntensity = clampedValue / (float)darkestColorCount;
 
                 // Set the color: red channel increases, green and blue stay 0
                 img.color = new Color(redIntensity, 0f, 0f);

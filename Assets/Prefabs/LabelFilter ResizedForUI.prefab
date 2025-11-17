@@ -65,6 +65,10 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: m_IsOn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -87,6 +91,10 @@ PrefabInstance:
     - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LabelFilterUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3547334527769544058, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -206,7 +214,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7692612770072913492, guid: 77b5d8e4ad3b8404087d20b15c1a7c57, type: 3}
       propertyPath: m_Name
-      value: LabelFilter (1) Variant
+      value: LabelFilter ResizedForUI
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

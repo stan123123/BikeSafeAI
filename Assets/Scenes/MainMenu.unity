@@ -917,7 +917,7 @@ MonoBehaviour:
   processDataButton: {fileID: 427211321}
   reviewDataButton: {fileID: 1109290887}
   processDataScene: ProcessingScene
-  reviewDataScene: ProcessingScene
+  reviewDataScene: ReviewingImages
 --- !u!114 &1759196027
 MonoBehaviour:
   m_ObjectHideFlags: 0

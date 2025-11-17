@@ -138,7 +138,7 @@ public class DataFilterManager : MonoBehaviour
         for (int i = 0; i < numberOfLabels; i++)
         {
             // Default: included, 100% accuracy, 0 min, unlimited max
-            labelFilterStats.Add(new LabelFilterData(true, 1f, 0, int.MaxValue));
+            labelFilterStats.Add(new LabelFilterData(false, 1f, 0, int.MaxValue));
         }
 
         Debug.Log($"Initialized {numberOfLabels} label filter data entries");
@@ -209,7 +209,7 @@ public class DataFilterManager : MonoBehaviour
         }
 
         Debug.LogWarning($"Invalid label index: {labelIndex}");
-        return new LabelFilterData(true, 1f, 0, int.MaxValue);
+        return new LabelFilterData(false, 1f, 0, int.MaxValue);
     }
 
     /// <summary>
