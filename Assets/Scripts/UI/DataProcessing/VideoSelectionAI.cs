@@ -6,7 +6,6 @@ using System;
 public class VideoSelectionUI : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private Button backButton;
     [SerializeField] private Button selectVideoButton;
     [SerializeField] private TMP_InputField frameInputField;
 
@@ -19,23 +18,14 @@ public class VideoSelectionUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (backButton != null) backButton.onClick.AddListener(BackClicked);
         if (selectVideoButton != null) selectVideoButton.onClick.AddListener(SelectVideoClicked);
         if (frameInputField != null) frameInputField.onEndEdit.AddListener(FrameInputEdited);
     }
 
     private void OnDisable()
     {
-        if (backButton != null) backButton.onClick.RemoveListener(BackClicked);
         if (selectVideoButton != null) selectVideoButton.onClick.RemoveListener(SelectVideoClicked);
         if (frameInputField != null) frameInputField.onEndEdit.RemoveListener(FrameInputEdited);
-    }
-
-    private void BackClicked()
-    {
-        OnBackButtonClicked?.Invoke();
-
-        UIManager.RequestUIChange(0);
     }
 
     private void SelectVideoClicked()

@@ -15,6 +15,6 @@ public class UI_SelectImages : MonoBehaviour
     public void SelectProcessVideoFrames()
     {
         //ImageProcesser.RequestProcessVideoFrames(); <- Delete later, keeping this here as a reminder
-        UIManager.RequestUIChange(4);
+        UIManager.RequestUIChange("ProcessingImages");
     }
 }

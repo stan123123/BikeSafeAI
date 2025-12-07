@@ -3,14 +3,10 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("Assign all canvases in order")]
-    public Canvas[] canvases;
-
-
     [Header("UI canvases to be able to swtich to")]
     [SerializeField]private UIPage[] UIPages;
 
-    public static event Action<int> OnUIChangeRequested;
+    public static event Action<string> OnUIChangeRequested;
 
     [Serializable]
     private struct UIPage
@@ -29,20 +25,30 @@ public class UIManager : MonoBehaviour
         OnUIChangeRequested -= SwitchUI;
     }
 
-    private void SwitchUI(int index)
+    private void SwitchUI(string UIName)
     {
-        if (index < 0 || index >= canvases.Length)
+        for (int i = 0; i < UIPages.Length; i++)
         {
-            Debug.LogWarning($"UI index {index} is out of range!");
-            return;
+            if (UIPages[i].name == UIName)
+            {
+                SwitchToUIPage(i);
+                return;
+            }
         }
 
-        for (int i = 0; i < canvases.Length; i++)
-            canvases[i].gameObject.SetActive(i == index);
+        Debug.LogError($"ERROR: No UI found with name {UIName}");
     }
 
-    public static void RequestUIChange(int index)
+    private void SwitchToUIPage(int indexToSwitchTo)
     {
-        OnUIChangeRequested?.Invoke(index);
+        for (int i = 0; i < UIPages.Length; i++)
+        {
+            UIPages[i].Canvas.gameObject.SetActive(i == indexToSwitchTo);
+        }
+    }
+
+    public static void RequestUIChange(string UIName)
+    {
+        OnUIChangeRequested?.Invoke(UIName);
     }
 }

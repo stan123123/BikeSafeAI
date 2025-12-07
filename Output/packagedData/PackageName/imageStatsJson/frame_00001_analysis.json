@@ -1,0 +1,152 @@
+{
+    "imageName": "frame_00001",
+    "totalInstances": 7,
+    "labels": [
+        {
+            "labelName": "construction--structure--building",
+            "labelId": 17,
+            "instanceCount": 1,
+            "averageScore": 0.9163910150527954,
+            "instances": [
+                {
+                    "id": 1,
+                    "score": 0.9163910150527954,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 0,
+                        "maxX": 1919,
+                        "maxY": 184
+                    },
+                    "center": {
+                        "x": 959,
+                        "y": 92
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "construction--barrier--fence",
+            "labelId": 3,
+            "instanceCount": 1,
+            "averageScore": 0.9475359916687012,
+            "instances": [
+                {
+                    "id": 2,
+                    "score": 0.9475359916687012,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 96,
+                        "maxX": 1674,
+                        "maxY": 1079
+                    },
+                    "center": {
+                        "x": 837,
+                        "y": 587
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--traffic-sign--front",
+            "labelId": 50,
+            "instanceCount": 2,
+            "averageScore": 0.8537744879722595,
+            "instances": [
+                {
+                    "id": 3,
+                    "score": 0.8256049752235413,
+                    "bbox": {
+                        "minX": 1615,
+                        "minY": 98,
+                        "maxX": 1919,
+                        "maxY": 196
+                    },
+                    "center": {
+                        "x": 1767,
+                        "y": 147
+                    }
+                },
+                {
+                    "id": 6,
+                    "score": 0.8819440007209778,
+                    "bbox": {
+                        "minX": 315,
+                        "minY": 146,
+                        "maxX": 1605,
+                        "maxY": 527
+                    },
+                    "center": {
+                        "x": 960,
+                        "y": 336
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "nature--terrain",
+            "labelId": 29,
+            "instanceCount": 1,
+            "averageScore": 0.6897640228271484,
+            "instances": [
+                {
+                    "id": 4,
+                    "score": 0.6897640228271484,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 399,
+                        "maxX": 1675,
+                        "maxY": 1063
+                    },
+                    "center": {
+                        "x": 837,
+                        "y": 731
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "nature--vegetation",
+            "labelId": 30,
+            "instanceCount": 1,
+            "averageScore": 0.9741590023040772,
+            "instances": [
+                {
+                    "id": 5,
+                    "score": 0.9741590023040772,
+                    "bbox": {
+                        "minX": 902,
+                        "minY": 71,
+                        "maxX": 1617,
+                        "maxY": 156
+                    },
+                    "center": {
+                        "x": 1259,
+                        "y": 113
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--billboard",
+            "labelId": 35,
+            "instanceCount": 1,
+            "averageScore": 0.6134759783744812,
+            "instances": [
+                {
+                    "id": 7,
+                    "score": 0.6134759783744812,
+                    "bbox": {
+                        "minX": 1677,
+                        "minY": 191,
+                        "maxX": 1919,
+                        "maxY": 1063
+                    },
+                    "center": {
+                        "x": 1798,
+                        "y": 627
+                    }
+                }
+            ]
+        }
+    ]
+}

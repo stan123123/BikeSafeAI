@@ -21,7 +21,7 @@ public class AISelectionButton : MonoBehaviour
     private void OnButtonClicked()
     {
         // Broadcast UI change to ProcessingImages
-        UIManager.RequestUIChange(0);
+        UIManager.RequestUIChange("SelectVideo");
 
         // TODO: later you can also set the processing type in ImageProcesser
         // Example: ImageProcesser.SetProcessingType(ImageProcesser.ProcessingType.Annotation);

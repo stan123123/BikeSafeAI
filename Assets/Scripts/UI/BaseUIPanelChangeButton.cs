@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class BaseUIPanelChangeButton : MonoBehaviour
 {
-    [SerializeField] private int PanelIndexToSwitchTo = 0;
+    [SerializeField] private string PanelIndexToSwitchTo = "";
 
     private Button button;
 

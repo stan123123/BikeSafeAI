@@ -177,10 +177,10 @@ MonoBehaviour:
   UIPages:
   - name: SelectVideo
     Canvas: {fileID: 921770562}
-  - name: 
-    Canvas: {fileID: 0}
-  - name: 
-    Canvas: {fileID: 0}
+  - name: ProcessingImages
+    Canvas: {fileID: 515514956}
+  - name: DoneProcessing
+    Canvas: {fileID: 1739667884}
 --- !u!1 &126279153
 GameObject:
   m_ObjectHideFlags: 0
@@ -2110,7 +2110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3916d5c34a93ef4d873a0859c1acfb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VideoSelectionUI
-  backButton: {fileID: 0}
   selectVideoButton: {fileID: 1178071725}
   frameInputField: {fileID: 1643410143}
   imageProcesserRef: {fileID: 2023145615}
