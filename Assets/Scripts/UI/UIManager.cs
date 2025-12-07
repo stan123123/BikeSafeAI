@@ -6,7 +6,18 @@ public class UIManager : MonoBehaviour
     [Header("Assign all canvases in order")]
     public Canvas[] canvases;
 
+
+    [Header("UI canvases to be able to swtich to")]
+    [SerializeField]private UIPage[] UIPages;
+
     public static event Action<int> OnUIChangeRequested;
+
+    [Serializable]
+    private struct UIPage
+    {
+        public string name;
+        public Canvas Canvas;
+    }
 
     private void OnEnable()
     {

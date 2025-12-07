@@ -9,7 +9,6 @@ public class SelectDataFolder : MonoBehaviour
     private string localSelectedDataPath = null;
 
     [SerializeField] private Button selectFolderButton;
-    [SerializeField] private Button continueButton;
 
     [SerializeField] private TMP_Text selectedFolderText;
 
@@ -17,7 +16,6 @@ public class SelectDataFolder : MonoBehaviour
 
     void Start()
     {
-        continueButton.interactable = false;
         selectedFolderText.text = "";
     }
 
@@ -41,8 +39,6 @@ public class SelectDataFolder : MonoBehaviour
 
             selectedFolderText.text = localSelectedDataPath;
 
-            continueButton.interactable = true;
-
             OnFolderSelected?.Invoke();
 
             ReviewDataManager.BroadcastDataPath(localSelectedDataPath);
@@ -53,7 +49,6 @@ public class SelectDataFolder : MonoBehaviour
         {
             localSelectedDataPath = null;
             selectedFolderText.text = "";
-            continueButton.interactable = false;
             Debug.Log("No folder selected.");
         }
     }
