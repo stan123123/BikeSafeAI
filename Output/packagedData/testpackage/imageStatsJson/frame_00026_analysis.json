@@ -1,0 +1,72 @@
+{
+    "imageName": "frame_00026",
+    "totalInstances": 3,
+    "labels": [
+        {
+            "labelName": "construction--structure--building",
+            "labelId": 17,
+            "instanceCount": 1,
+            "averageScore": 0.8321939706802368,
+            "instances": [
+                {
+                    "id": 1,
+                    "score": 0.8321939706802368,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 0,
+                        "maxX": 1919,
+                        "maxY": 1079
+                    },
+                    "center": {
+                        "x": 959,
+                        "y": 539
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--billboard",
+            "labelId": 35,
+            "instanceCount": 1,
+            "averageScore": 0.6801319718360901,
+            "instances": [
+                {
+                    "id": 2,
+                    "score": 0.6801319718360901,
+                    "bbox": {
+                        "minX": 1019,
+                        "minY": 456,
+                        "maxX": 1882,
+                        "maxY": 648
+                    },
+                    "center": {
+                        "x": 1450,
+                        "y": 552
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--traffic-sign--front",
+            "labelId": 50,
+            "instanceCount": 1,
+            "averageScore": 0.614670991897583,
+            "instances": [
+                {
+                    "id": 3,
+                    "score": 0.614670991897583,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 0,
+                        "maxX": 934,
+                        "maxY": 139
+                    },
+                    "center": {
+                        "x": 467,
+                        "y": 69
+                    }
+                }
+            ]
+        }
+    ]
+}

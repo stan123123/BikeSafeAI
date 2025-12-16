@@ -7,19 +7,32 @@ using System.Linq;
 /// </summary>
 public class ProcessingResultPackager : MonoBehaviour
 {
-    public string PackageName = "PackageName";  // Name selected by user for this batch
+    public string DefaultPackageName = "PackageName";
 
-    // Event to trigger packaging (no arguments)
+    private float userInputFrameDeltaSeconds = 1;
+
+    private bool HasSelectedPackageName = false;
+
+    // Event to trigger packaging
     public static event System.Action OnPackageDataRequested;
+
+    private string packageRoot = null;
 
     private void OnEnable()
     {
         OnPackageDataRequested += PackageCurrentData;
+        ImageProcesser.OnProcessingProgress += CheckIfProcessingFinished;
     }
 
     private void OnDisable()
     {
         OnPackageDataRequested -= PackageCurrentData;
+        ImageProcesser.OnProcessingProgress -= CheckIfProcessingFinished;
+    }
+
+    private void setUserInputFrameDeltaSeconds(float newValue)
+    {
+        userInputFrameDeltaSeconds = newValue;
     }
 
     /// <summary>
@@ -27,22 +40,26 @@ public class ProcessingResultPackager : MonoBehaviour
     /// </summary>
     private void PackageCurrentData()
     {
-        if (string.IsNullOrEmpty(PackageName))
-            PackageName = "UnnamedPackage";
+        string usedPackageName = ProcessingUserSelectionManager.SelectedVideoName;
 
-        string packageRoot = PathConfig.CreatePackagedDataFolders(PackageName);
+        if (string.IsNullOrEmpty(usedPackageName))
+        {
+            usedPackageName = GetAvailablePackageName(DefaultPackageName);
+        }
+
+        packageRoot = PathConfig.CreatePackagedDataFolders(usedPackageName);
 
         // Copy temp used images
         foreach (string file in Directory.GetFiles(PathConfig.UsedImagesFolder))
         {
-            string dest = Path.Combine(PathConfig.GetPackagedUsedImagesFolder(PackageName), Path.GetFileName(file));
+            string dest = Path.Combine(PathConfig.GetPackagedUsedImagesFolder(usedPackageName), Path.GetFileName(file));
             File.Copy(file, dest, true);
         }
 
         // Copy all annotated images
         foreach (string file in Directory.GetFiles(PathConfig.AnnotatedImagesFolder))
         {
-            string dest = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(PackageName), Path.GetFileName(file));
+            string dest = Path.Combine(PathConfig.GetPackagedAnnotatedImagesFolder(usedPackageName), Path.GetFileName(file));
             File.Copy(file, dest, true);
         }
 
@@ -55,7 +72,7 @@ public class ProcessingResultPackager : MonoBehaviour
         }
 
         // Process only *_panoptic-colored-mask_objects.json files
-        string annotatedFolder = PathConfig.GetPackagedAnnotatedImagesFolder(PackageName);
+        string annotatedFolder = PathConfig.GetPackagedAnnotatedImagesFolder(usedPackageName);
         foreach (string objectsJsonPath in Directory.GetFiles(annotatedFolder)
                                                      .Where(f => f.EndsWith("_panoptic-colored-mask_objects.json")))
         {
@@ -79,17 +96,85 @@ public class ProcessingResultPackager : MonoBehaviour
 
             // Analyze using the panoptic objects JSON
             var data = AnnotationAnalyzer.AnalyzeImage(legend, objectsJsonPath, baseName);
-            AnnotationAnalyzer.SaveToJson(data, PackageName);
+            AnnotationAnalyzer.SaveToJson(data, usedPackageName);
 
             Debug.Log($"Analyzed {baseName}: {data.totalInstances} instances across {data.labels.Count} label types");
         }
 
-        Debug.Log($"Packaged data for '{PackageName}' successfully!");
+        Debug.Log($"Packaged data for '{usedPackageName}' successfully!");
+    }
+
+    private string GetAvailablePackageName(string baseName)
+    {
+        // Check if base name is available
+        if (ProcessedFolderNameValidator.IsFolderNameAvailable(baseName))
+        {
+            return baseName;
+        }
+
+        // If not, start incrementing
+        int counter = 1;
+        string candidateName;
+
+        do
+        {
+            candidateName = $"{baseName}_{counter:D2}"; // D2 formats as 01, 02, 03, etc.
+            counter++;
+        }
+        while (!ProcessedFolderNameValidator.IsFolderNameAvailable(candidateName));
+
+        Debug.Log($"Package name '{baseName}' already exists. Using '{candidateName}' instead.");
+
+        return candidateName;
     }
 
     public static void RequestPackageData()
     {
         OnPackageDataRequested?.Invoke();
+    }
+
+    private void CheckIfProcessingFinished(int currentProgress, int totalToProcess)
+    {
+        packageRoot = PathConfig.CreatePackagedDataFolders(ProcessingUserSelectionManager.SelectedVideoName);
+
+        if (currentProgress == totalToProcess)
+        {
+            createProcessedVideoData(true, currentProgress);
+        }
+        else
+        {
+            createProcessedVideoData(false, currentProgress);
+        }
+    }
+
+    private void createProcessedVideoData(bool isDoneProcessing, int totalFrames)
+    {
+        if (packageRoot == null) 
+        {
+            Debug.LogError("PackageRoot is Null, cannot save processed folder data.");
+
+            return;
+        }
+
+        ProcessedVideoData data = new ProcessedVideoData
+        {
+            hasGPSData = false,
+            totalFrames = totalFrames,
+            videoDurationSeconds = 1,
+            userInputFrameDeltaSeconds = ProcessingUserSelectionManager.SelectedDeltaSeconds,
+            hasFinishedProcessingWithoutError = isDoneProcessing
+        };
+
+        // Serialize to JSON
+        string json = JsonUtility.ToJson(data, true);
+
+        // Combine path with filename (assuming you have a constant for the name)
+        string fullPath = Path.Combine(packageRoot, "ProcessedVideoData.json");
+
+        // Write JSON to file
+        File.WriteAllText(fullPath, json);
+
+        Debug.Log($"ProcessedVideoData saved to: {fullPath}");
     }
 
     /// <summary>

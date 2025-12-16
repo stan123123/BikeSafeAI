@@ -1,0 +1,42 @@
+{
+    "imageName": "frame_00003",
+    "totalInstances": 2,
+    "labels": [
+        {
+            "labelName": "construction--structure--building",
+            "labelId": 17,
+            "instanceCount": 2,
+            "averageScore": 0.6743620038032532,
+            "instances": [
+                {
+                    "id": 1,
+                    "score": 0.8462370038032532,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 0,
+                        "maxX": 1919,
+                        "maxY": 1079
+                    },
+                    "center": {
+                        "x": 959,
+                        "y": 539
+                    }
+                },
+                {
+                    "id": 2,
+                    "score": 0.5024870038032532,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 0,
+                        "maxX": 1919,
+                        "maxY": 1072
+                    },
+                    "center": {
+                        "x": 959,
+                        "y": 536
+                    }
+                }
+            ]
+        }
+    ]
+}

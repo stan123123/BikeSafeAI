@@ -18,6 +18,8 @@ public static class PathConfig
         }
     }
 
+    public static string ProcessedVideoDataName = "ProcessedVideoData";
+
     // External package paths
     public static string AIPackagePath => Path.Combine(ProjectRoot, "ExternalPackages", "Segmentation");
     public static string FrameExtractorPath => Path.Combine(ProjectRoot, "ExternalPackages", "frame_extractor");
@@ -37,6 +39,8 @@ public static class PathConfig
     // Full paths for temp folders
     public static string UsedImagesFolder => Path.Combine(OutputFolder, USED_IMAGES_FOLDER_NAME);
     public static string AnnotatedImagesFolder => Path.Combine(OutputFolder, ANNOTATED_IMAGES_FOLDER_NAME);
+
+    public static string PackagedDataFolder => Path.Combine(OutputFolder, "packagedData");
 
     /// <summary>
     /// Initialize all required temp directories. Call this once at application start.

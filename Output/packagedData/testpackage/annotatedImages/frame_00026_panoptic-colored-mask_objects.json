@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "label_id": 17,
+    "was_fused": false,
+    "score": 0.832194
+  },
+  {
+    "id": 2,
+    "label_id": 35,
+    "was_fused": false,
+    "score": 0.680132
+  },
+  {
+    "id": 3,
+    "label_id": 50,
+    "was_fused": false,
+    "score": 0.614671
+  }
+]

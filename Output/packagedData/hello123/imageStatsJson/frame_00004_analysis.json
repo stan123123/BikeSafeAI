@@ -1,0 +1,28 @@
+{
+    "imageName": "frame_00004",
+    "totalInstances": 1,
+    "labels": [
+        {
+            "labelName": "construction--structure--building",
+            "labelId": 17,
+            "instanceCount": 1,
+            "averageScore": 0.9345030188560486,
+            "instances": [
+                {
+                    "id": 1,
+                    "score": 0.9345030188560486,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 0,
+                        "maxX": 1919,
+                        "maxY": 1079
+                    },
+                    "center": {
+                        "x": 959,
+                        "y": 539
+                    }
+                }
+            ]
+        }
+    ]
+}

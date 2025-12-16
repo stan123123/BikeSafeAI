@@ -1,0 +1,50 @@
+{
+    "imageName": "frame_00009",
+    "totalInstances": 2,
+    "labels": [
+        {
+            "labelName": "construction--structure--building",
+            "labelId": 17,
+            "instanceCount": 1,
+            "averageScore": 0.9253919720649719,
+            "instances": [
+                {
+                    "id": 1,
+                    "score": 0.9253919720649719,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 0,
+                        "maxX": 1919,
+                        "maxY": 1079
+                    },
+                    "center": {
+                        "x": 959,
+                        "y": 539
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "object--traffic-sign--front",
+            "labelId": 50,
+            "instanceCount": 1,
+            "averageScore": 0.9412099719047546,
+            "instances": [
+                {
+                    "id": 2,
+                    "score": 0.9412099719047546,
+                    "bbox": {
+                        "minX": 321,
+                        "minY": 138,
+                        "maxX": 1553,
+                        "maxY": 402
+                    },
+                    "center": {
+                        "x": 937,
+                        "y": 270
+                    }
+                }
+            ]
+        }
+    ]
+}

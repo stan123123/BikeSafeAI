@@ -25,7 +25,7 @@ public class ImageProcesser : MonoBehaviour
     public static void RequestProcessFolderOfImages() => OnProcessSelectFolderOfImages?.Invoke();
     public static void RequestProcessVideoFrames() => OnSelectVideoAndProcessFrames?.Invoke();
 
-    float deltaSecondsPerFrameOfVideo = 1;
+    float defaultDeltaSeconds = 1;
 
     // Request current progress info (for polling if needed)
     public static void GetCurrentProgress(out int current, out int total)
@@ -50,6 +50,8 @@ public class ImageProcesser : MonoBehaviour
         OnProcessSelectSingleImage += ProcessSelectSingleImage;
         OnProcessSelectFolderOfImages += ProcessSelectFolderOfImages;
         OnSelectVideoAndProcessFrames += SelectVideoAndProcessFrames;
+
+        VideoSelectionUI.OnStartProcessing += SelectVideoAndProcessFrames;
     }
 
     private void OnDisable()
@@ -57,6 +59,8 @@ public class ImageProcesser : MonoBehaviour
         OnProcessSelectSingleImage -= ProcessSelectSingleImage;
         OnProcessSelectFolderOfImages -= ProcessSelectFolderOfImages;
         OnSelectVideoAndProcessFrames -= SelectVideoAndProcessFrames;
+
+        VideoSelectionUI.OnStartProcessing -= SelectVideoAndProcessFrames;
     }
 
     void Start()
@@ -70,14 +74,6 @@ public class ImageProcesser : MonoBehaviour
         {
             packager = FindObjectOfType<ProcessingResultPackager>();
         }
-    }
-
-    public void ChangeAmountOfImagesToProcessVideo(string newValue)
-    {
-        if (float.TryParse(newValue, out float newAmount))
-            deltaSecondsPerFrameOfVideo = Mathf.Max(0.01f, newAmount);
-        else
-            UnityEngine.Debug.LogWarning($"Invalid number entered: {newValue}");
     }
 
     public void ProcessSelectSingleImage()
@@ -184,14 +180,16 @@ public class ImageProcesser : MonoBehaviour
 
     public void SelectVideoAndProcessFrames()
     {
-        var extensions = new[] { new SFB.ExtensionFilter("Video Files", "mp4", "mov", "avi") };
-        string[] paths = StandaloneFileBrowser.OpenFilePanel("Select a video", "", extensions, false);
-        if (paths == null || paths.Length == 0 || string.IsNullOrEmpty(paths[0]))
-            return;
+        float frameDeltaSeconds = ProcessingUserSelectionManager.SelectedDeltaSeconds;
 
-        string videoPath = paths[0];
+        if (frameDeltaSeconds < 0)
+        {
+            frameDeltaSeconds = defaultDeltaSeconds;
 
-        StartCoroutine(ProcessVideoFrames(videoPath, deltaSecondsPerFrameOfVideo));
+            UnityEngine.Debug.Log("Defaulting selected delta seconds");
+        }
+
+        StartCoroutine(ProcessVideoFrames(ProcessingUserSelectionManager.SelectedVideoPath, frameDeltaSeconds));
     }
 
     private IEnumerator WaitForFramesFolder(string folder, int expectedFrameCount, float timeoutSeconds = 30f)
@@ -379,9 +377,9 @@ public class ImageProcesser : MonoBehaviour
             return;
         }
 
-        string packageName = packager.PackageName;
+        string packageName = ProcessingUserSelectionManager.SelectedVideoName;
         if (string.IsNullOrEmpty(packageName))
-            packageName = "UnnamedPackage";
+            packageName = packager.DefaultPackageName;
 
         // Create all package directories at once
         PathConfig.CreatePackagedDataFolders(packageName);
@@ -401,9 +399,9 @@ public class ImageProcesser : MonoBehaviour
             yield break;
         }
 
-        string packageName = packager.PackageName;
+        string packageName = ProcessingUserSelectionManager.SelectedVideoName;
         if (string.IsNullOrEmpty(packageName))
-            packageName = "UnnamedPackage";
+            packageName = packager.DefaultPackageName;
 
         string imageFileName = Path.GetFileName(originalImagePath);
         string baseNameNoExt = Path.GetFileNameWithoutExtension(imageFileName);

@@ -1,0 +1,50 @@
+{
+    "imageName": "frame_00018",
+    "totalInstances": 2,
+    "labels": [
+        {
+            "labelName": "construction--structure--building",
+            "labelId": 17,
+            "instanceCount": 1,
+            "averageScore": 0.7034450173377991,
+            "instances": [
+                {
+                    "id": 1,
+                    "score": 0.7034450173377991,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 138,
+                        "maxX": 1919,
+                        "maxY": 1079
+                    },
+                    "center": {
+                        "x": 959,
+                        "y": 608
+                    }
+                }
+            ]
+        },
+        {
+            "labelName": "nature--sky",
+            "labelId": 27,
+            "instanceCount": 1,
+            "averageScore": 0.8511250019073486,
+            "instances": [
+                {
+                    "id": 2,
+                    "score": 0.8511250019073486,
+                    "bbox": {
+                        "minX": 0,
+                        "minY": 0,
+                        "maxX": 1919,
+                        "maxY": 614
+                    },
+                    "center": {
+                        "x": 959,
+                        "y": 307
+                    }
+                }
+            ]
+        }
+    ]
+}
