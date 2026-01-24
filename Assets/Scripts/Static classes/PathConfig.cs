@@ -1,0 +1,108 @@
+using UnityEngine;
+using System.IO;
+
+/// <summary>
+/// Centralized configuration for all folder paths used in the application.
+/// </summary>
+public static class PathConfig
+{
+    // Root paths
+    private static string _projectRoot;
+    public static string ProjectRoot
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_projectRoot))
+                _projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+            return _projectRoot;
+        }
+    }
+
+    public static string ProcessedVideoDataName = "ProcessedVideoData";
+
+    // External package paths
+    public static string AIPackagePath => Path.Combine(ProjectRoot, "ExternalPackages", "Segmentation");
+    public static string FrameExtractorPath => Path.Combine(ProjectRoot, "ExternalPackages", "frame_extractor");
+
+    // Output folder paths
+    private const string OUTPUT_FOLDER_NAME = "Output";
+    public static string OutputFolder => Path.Combine(ProjectRoot, OUTPUT_FOLDER_NAME);
+
+    // Temp folder names
+    private const string USED_IMAGES_FOLDER_NAME = "TEMP_ImagesUsed";
+    private const string ANNOTATED_IMAGES_FOLDER_NAME = "TEMP_AnnotatedImages";
+
+    // Annotation Legend folder & config file
+    public static string AnnotationLegendFolder => Path.Combine(ProjectRoot, "ExternalPackages", "AnnotationLegend");
+    public static string AnnotationConfigFile => Path.Combine(AnnotationLegendFolder, "config_v1.2.json");
+
+    // Full paths for temp folders
+    public static string UsedImagesFolder => Path.Combine(OutputFolder, USED_IMAGES_FOLDER_NAME);
+    public static string AnnotatedImagesFolder => Path.Combine(OutputFolder, ANNOTATED_IMAGES_FOLDER_NAME);
+
+    public static string PackagedDataFolder => Path.Combine(OutputFolder, "packagedData");
+
+    public const string UsedImagesFolderName = "usedImages";
+    public const string AnnotatedImagesFolderName = "annotatedImages";
+    public const string ImageStatsJsonFolderName = "imageStatsJson";
+
+    /// <summary>
+    /// Initialize all required temp directories. Call this once at application start.
+    /// </summary>
+    public static void InitializeDirectories()
+    {
+        Directory.CreateDirectory(UsedImagesFolder);
+        Directory.CreateDirectory(AnnotatedImagesFolder);
+
+        Debug.Log($"Initialized temp folders:\n" +
+                  $"Used Images: {UsedImagesFolder}\n" +
+                  $"Annotated Images: {AnnotatedImagesFolder}");
+    }
+
+    /// <summary>
+    /// Creates a packaged data folder structure for a named batch.
+    /// Returns the root folder of the package.
+    /// </summary>
+    /// <param name="packageName">Name of the batch/package.</param>
+    public static string CreatePackagedDataFolders(string packageName)
+    {
+        if (string.IsNullOrEmpty(packageName))
+            packageName = "UnnamedPackage";
+
+        string packageRoot = Path.Combine(OutputFolder, "packagedData", packageName);
+
+        // Subfolders
+        string usedImages = Path.Combine(packageRoot, UsedImagesFolderName);
+        string annotatedImages = Path.Combine(packageRoot, AnnotatedImagesFolderName);
+        string imageStatsJson = Path.Combine(packageRoot, ImageStatsJsonFolderName);
+
+        // Create all directories
+        Directory.CreateDirectory(packageRoot);
+        Directory.CreateDirectory(usedImages);
+        Directory.CreateDirectory(annotatedImages);
+        Directory.CreateDirectory(imageStatsJson);
+
+        Debug.Log($"Created packaged data folders for batch '{packageName}':\n" +
+                  $"Package Root: {packageRoot}\n" +
+                  $"Used Images: {usedImages}\n" +
+                  $"Annotated Images: {annotatedImages}\n" +
+                  $"Image Stats JSON: {imageStatsJson}");
+
+        return packageRoot;
+    }
+
+    public static string GetPackagedImageStatsJsonFolder(string packageName)
+    {
+        return Path.Combine(OutputFolder, "packagedData", packageName, "imageStatsJson");
+    }
+
+    public static string GetPackagedImageStatsFolder(string packageName)
+        => Path.Combine(OutputFolder, "packagedData", packageName, "imageStatsJson");
+
+    /// <summary>
+    /// Convenience getters
+    /// </summary>
+    public static string GetPackagedUsedImagesFolder(string packageName) => Path.Combine(OutputFolder, "packagedData", packageName, "usedImages");
+    public static string GetPackagedAnnotatedImagesFolder(string packageName) => Path.Combine(OutputFolder, "packagedData", packageName, "annotatedImages");
+    public static string GetPackagedDataFolder(string packageName) => Path.Combine(OutputFolder, "packagedData", packageName);
+}
